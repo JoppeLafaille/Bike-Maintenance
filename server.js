@@ -14,6 +14,10 @@ const ACTIVITIES_FILE = path.join(__dirname, "strava-activities.json");
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 
+// ---------------------------------------------------------
+// JSON BESTANDEN
+// ---------------------------------------------------------
+
 function readJsonFile(file, fallback) {
     try {
         if (!fs.existsSync(file)) {
@@ -62,6 +66,10 @@ function saveStoredActivities(data) {
     writeJsonFile(ACTIVITIES_FILE, data);
 }
 
+// ---------------------------------------------------------
+// STRAVA CONFIGURATIE
+// ---------------------------------------------------------
+
 function isStravaConfigured() {
     return Boolean(
         process.env.STRAVA_CLIENT_ID &&
@@ -70,6 +78,36 @@ function isStravaConfigured() {
     );
 }
 
+// ---------------------------------------------------------
+// STRAVA CONFIGURATIE DEBUG
+// ---------------------------------------------------------
+// Deze route toont NOOIT je Client ID of Client Secret.
+// Hij toont alleen of de variabelen aanwezig zijn.
+
+app.get("/api/strava/debug", (req, res) => {
+    const clientId = process.env.STRAVA_CLIENT_ID;
+    const clientSecret = process.env.STRAVA_CLIENT_SECRET;
+    const redirectUri = process.env.STRAVA_REDIRECT_URI;
+
+    res.json({
+        render: Boolean(process.env.RENDER),
+
+        clientIdAanwezig: Boolean(clientId),
+        clientIdLengte: clientId ? clientId.length : 0,
+
+        clientSecretAanwezig: Boolean(clientSecret),
+        clientSecretLengte: clientSecret ? clientSecret.length : 0,
+
+        redirectUriAanwezig: Boolean(redirectUri),
+        redirectUri: redirectUri || null,
+
+        redirectUriCorrect:
+            redirectUri ===
+            "https://bike-maintenance-ai5y.onrender.com/api/strava/callback",
+
+        stravaConfigured: isStravaConfigured()
+    });
+});
 
 // ---------------------------------------------------------
 // STRAVA ACCESS TOKEN
@@ -133,7 +171,6 @@ async function getValidAccessToken() {
     return updatedTokenData.access_token;
 }
 
-
 // ---------------------------------------------------------
 // STRAVA LOGIN
 // ---------------------------------------------------------
@@ -158,7 +195,6 @@ app.get("/api/strava/auth", (req, res) => {
         params.toString()
     );
 });
-
 
 // ---------------------------------------------------------
 // STRAVA CALLBACK
@@ -277,7 +313,6 @@ app.get("/api/strava/callback", async (req, res) => {
     }
 });
 
-
 // ---------------------------------------------------------
 // STRAVA STATUS
 // ---------------------------------------------------------
@@ -296,7 +331,6 @@ app.get("/api/strava/status", (req, res) => {
             : null
     });
 });
-
 
 // ---------------------------------------------------------
 // STRAVA ACTIVITEITEN
@@ -327,6 +361,7 @@ app.get("/api/strava/activities", async (req, res) => {
             console.log(
                 "Eerste synchronisatie: laatste 7 dagen."
             );
+
         } else {
             // Daarna:
             // alleen nieuwe activiteiten ophalen.
@@ -477,7 +512,6 @@ app.get("/api/strava/activities", async (req, res) => {
     }
 });
 
-
 // ---------------------------------------------------------
 // STRAVA ONTKOPPELEN
 // ---------------------------------------------------------
@@ -499,6 +533,7 @@ app.post("/api/strava/disconnect", async (req, res) => {
                         }
                     }
                 );
+
             } catch (error) {
                 console.error(
                     "Strava deauthorize fout:",
@@ -532,7 +567,6 @@ app.post("/api/strava/disconnect", async (req, res) => {
     }
 });
 
-
 // ---------------------------------------------------------
 // TEST
 // ---------------------------------------------------------
@@ -544,13 +578,32 @@ app.get("/api/test", (req, res) => {
     });
 });
 
-
 // ---------------------------------------------------------
 // SERVER STARTEN
 // ---------------------------------------------------------
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
     console.log(
         "Bike Maintenance draait op poort " + PORT
+    );
+
+    console.log(
+        "Strava configuratie:",
+        isStravaConfigured() ? "aanwezig" : "ONTBREKEND"
+    );
+
+    console.log(
+        "STRAVA_CLIENT_ID aanwezig:",
+        Boolean(process.env.STRAVA_CLIENT_ID)
+    );
+
+    console.log(
+        "STRAVA_CLIENT_SECRET aanwezig:",
+        Boolean(process.env.STRAVA_CLIENT_SECRET)
+    );
+
+    console.log(
+        "STRAVA_REDIRECT_URI aanwezig:",
+        Boolean(process.env.STRAVA_REDIRECT_URI)
     );
 });
