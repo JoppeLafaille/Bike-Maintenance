@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Bike Maintenance</title>
 
     <style>
+
         * {
             box-sizing: border-box;
         }
@@ -14,64 +16,101 @@
             margin: 0;
             font-family: Arial, sans-serif;
             background: #f4f6f8;
-            color: #222;
+            color: #1f2937;
         }
 
         header {
             background: #111827;
             color: white;
-            padding: 25px;
-            text-align: center;
+            padding: 20px;
         }
 
         header h1 {
-            margin: 0 0 8px;
+            margin: 0 0 15px;
         }
 
-        header p {
-            margin: 0;
-            color: #cbd5e1;
+        nav {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        nav button {
+            background: #374151;
+            color: white;
+            border: 0;
+            padding: 10px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        nav button:hover {
+            background: #4b5563;
+        }
+
+        nav button.active {
+            background: #2563eb;
         }
 
         main {
-            max-width: 1100px;
-            margin: 30px auto;
-            padding: 0 20px 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
-        h2 {
-            margin-top: 0;
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(220px, 1fr)
+            );
+            gap: 16px;
+        }
+
+        .stat {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .stat strong {
+            display: block;
+            font-size: 28px;
+            margin-top: 8px;
         }
 
         button {
-            border: none;
+            border: 0;
             border-radius: 8px;
-            padding: 10px 15px;
+            padding: 10px 14px;
             cursor: pointer;
             font-size: 14px;
         }
 
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         .primary {
             background: #2563eb;
-            color: white;
-        }
-
-        .primary:hover {
-            background: #1d4ed8;
-        }
-
-        .secondary {
-            background: #e5e7eb;
-            color: #111827;
-        }
-
-        .danger {
-            background: #dc2626;
-            color: white;
-        }
-
-        .warning {
-            background: #f59e0b;
             color: white;
         }
 
@@ -80,66 +119,19 @@
             color: white;
         }
 
-        .card {
-            background: white;
-            border-radius: 14px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        .danger {
+            background: #dc2626;
+            color: white;
         }
 
-        .dashboard {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .stat {
-            background: white;
-            padding: 20px;
-            border-radius: 14px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-        }
-
-        .stat-title {
-            color: #64748b;
-            font-size: 14px;
-            margin-bottom: 8px;
-        }
-
-        .stat-value {
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .bike-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .bike-button {
+        .secondary {
             background: #e5e7eb;
             color: #111827;
         }
 
-        .bike-button.active {
-            background: #2563eb;
+        .strava {
+            background: #fc4c02;
             color: white;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-        }
-
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 6px;
         }
 
         input,
@@ -147,233 +139,198 @@
         textarea {
             width: 100%;
             padding: 10px;
-            border: 1px solid #cbd5e1;
+            border: 1px solid #d1d5db;
             border-radius: 8px;
             font-size: 14px;
+            margin-top: 5px;
         }
 
         textarea {
-            min-height: 90px;
+            min-height: 80px;
             resize: vertical;
         }
 
-        .full {
-            grid-column: 1 / -1;
-        }
-
-        .form-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .part {
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 15px;
+        label {
+            display: block;
             margin-bottom: 12px;
+            font-weight: 600;
         }
 
-        .part-header {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            align-items: center;
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(180px, 1fr)
+            );
+            gap: 12px;
         }
 
-        .part-name {
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .part-info {
-            color: #64748b;
-            margin-top: 8px;
-            line-height: 1.6;
-        }
-
-        .part-actions {
-            display: flex;
-            gap: 7px;
-            flex-wrap: wrap;
+        .bike-card,
+        .part-card,
+        .maintenance-card,
+        .ride-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 15px;
             margin-top: 12px;
         }
 
-        /* =========================
-           LEVENSDUURSBALK
-           ========================= */
-
-        .lifespan-container {
-            margin-top: 15px;
+        .part-card {
+            position: relative;
         }
 
-        .lifespan-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 7px;
+        .ride-card {
+            cursor: pointer;
+            transition: 0.15s;
+        }
+
+        .ride-card:hover {
+            border-color: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .ride-card.linked {
+            background: #ecfdf5;
+            border-color: #86efac;
+        }
+
+        .ride-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .ride-distance {
+            font-size: 22px;
+            font-weight: bold;
+            margin: 8px 0;
+        }
+
+        .ride-meta {
+            color: #6b7280;
             font-size: 14px;
+            line-height: 1.6;
         }
 
-        .lifespan-label {
-            font-weight: bold;
-        }
-
-        .lifespan-percent {
-            font-weight: bold;
-        }
-
-        .progress-background {
-            width: 100%;
-            height: 15px;
+        .progress-container {
             background: #e5e7eb;
+            height: 14px;
             border-radius: 999px;
             overflow: hidden;
+            margin-top: 8px;
         }
 
-        .progress-bar {
+        .progress {
             height: 100%;
-            width: 0%;
-            border-radius: 999px;
-            transition: width 0.3s ease;
+            transition: width 0.3s;
         }
 
-        .progress-green {
+        .progress.green {
             background: #16a34a;
         }
 
-        .progress-orange {
+        .progress.orange {
             background: #f59e0b;
         }
 
-        .progress-red {
+        .progress.red {
             background: #dc2626;
         }
 
-        .progress-text {
-            margin-top: 7px;
-            font-size: 13px;
-            color: #64748b;
-        }
-
-        .status-good {
-            color: #16a34a;
+        .status-green {
+            color: #15803d;
             font-weight: bold;
         }
 
-        .status-warning {
-            color: #f59e0b;
+        .status-orange {
+            color: #d97706;
             font-weight: bold;
         }
 
-        .status-danger {
+        .status-red {
             color: #dc2626;
             font-weight: bold;
         }
 
-        /* =========================
-           ONDERHOUD
-           ========================= */
-
-        .maintenance-item {
-            border-left: 5px solid #2563eb;
-            background: #f8fafc;
-            padding: 15px;
-            margin-bottom: 12px;
-            border-radius: 8px;
-        }
-
-        .maintenance-header {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-        }
-
-        .maintenance-title {
-            font-weight: bold;
-            font-size: 17px;
-        }
-
-        .maintenance-info {
-            color: #64748b;
-            margin-top: 7px;
-        }
-
-        .history-item {
-            border: 1px solid #e2e8f0;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-        }
-
-        .empty {
-            color: #64748b;
-            padding: 10px 0;
-        }
-
-        .upcoming {
-            border-left: 5px solid #f59e0b;
-            padding: 12px;
-            background: #fffbeb;
-            border-radius: 8px;
-            margin-bottom: 10px;
-        }
-
-        .overview-part {
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            padding: 14px;
-            margin-bottom: 10px;
-        }
-
-        .overview-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .overview-name {
-            font-weight: bold;
-        }
-
-        .overview-bike {
-            color: #64748b;
+        .small {
+            color: #6b7280;
             font-size: 13px;
         }
 
-        .bike-actions {
+        .actions {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
-            margin-top: 15px;
+            margin-top: 12px;
         }
 
         .hidden {
-            display: none;
+            display: none !important;
         }
 
-        @media (max-width: 800px) {
-
-            .dashboard {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .full {
-                grid-column: auto;
-            }
+        .message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 12px;
         }
 
-        @media (max-width: 500px) {
-
-            .dashboard {
-                grid-template-columns: 1fr;
-            }
+        .message.info {
+            background: #eff6ff;
+            color: #1d4ed8;
         }
+
+        .message.error {
+            background: #fef2f2;
+            color: #b91c1c;
+        }
+
+        .message.success-message {
+            background: #f0fdf4;
+            color: #15803d;
+        }
+
+        .strava-connected {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            padding: 12px;
+            border-radius: 8px;
+            background: #fff7ed;
+            color: #9a3412;
+        }
+
+        .strava-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #16a34a;
+        }
+
+        .empty {
+            padding: 20px;
+            text-align: center;
+            color: #6b7280;
+            background: white;
+            border-radius: 12px;
+        }
+
+        @media (max-width: 600px) {
+
+            main {
+                padding: 12px;
+            }
+
+            header {
+                padding: 15px;
+            }
+
+            nav button {
+                flex: 1;
+            }
+
+        }
+
     </style>
 </head>
 
@@ -383,696 +340,585 @@
 
     <h1>🚴 Bike Maintenance</h1>
 
-    <p>
-        Beheer je fietsen, onderdelen en onderhoud
-    </p>
+    <nav>
+
+        <button
+            class="nav-button active"
+            data-page="dashboard"
+        >
+            Dashboard
+        </button>
+
+        <button
+            class="nav-button"
+            data-page="bikes"
+        >
+            🚲 Fietsen
+        </button>
+
+        <button
+            class="nav-button"
+            data-page="parts"
+        >
+            🔧 Onderdelen
+        </button>
+
+        <button
+            class="nav-button"
+            data-page="maintenance"
+        >
+            🛠 Onderhoud
+        </button>
+
+        <button
+            class="nav-button"
+            data-page="rides"
+        >
+            🚴 Ritten
+        </button>
+
+    </nav>
 
 </header>
 
 
 <main>
 
-    <!-- DASHBOARD -->
 
-    <section class="dashboard">
+    <!-- ==================================================
+         DASHBOARD
+         ================================================== -->
 
-        <div class="stat">
+    <section
+        id="dashboard"
+        class="page active"
+    >
 
-            <div class="stat-title">
-                Fietsen
+        <h2>Dashboard</h2>
+
+        <div class="grid">
+
+            <div class="stat">
+
+                <div>Aantal fietsen</div>
+
+                <strong id="dashboardBikeCount">
+                    0
+                </strong>
+
             </div>
 
-            <div
-                class="stat-value"
-                id="dashboardBikes">
-                0
+
+            <div class="stat">
+
+                <div>Totale kilometers</div>
+
+                <strong id="dashboardTotalKm">
+                    0 km
+                </strong>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div>Aantal onderdelen</div>
+
+                <strong id="dashboardPartCount">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div>Totale kosten</div>
+
+                <strong id="dashboardTotalCost">
+                    €0,00
+                </strong>
+
             </div>
 
         </div>
 
 
-        <div class="stat">
+        <div class="card">
 
-            <div class="stat-title">
-                Totale kilometers
-            </div>
+            <h3>📅 Binnenkort onderhoud</h3>
 
-            <div
-                class="stat-value"
-                id="dashboardKm">
-                0
-            </div>
+            <div id="upcomingMaintenance"></div>
 
         </div>
 
 
-        <div class="stat">
+        <div class="card">
 
-            <div class="stat-title">
-                Onderdelen
-            </div>
+            <h3>🚴 Recente Strava-ritten</h3>
 
-            <div
-                class="stat-value"
-                id="dashboardParts">
-                0
-            </div>
-
-        </div>
-
-
-        <div class="stat">
-
-            <div class="stat-title">
-                Totale kosten
-            </div>
-
-            <div
-                class="stat-value"
-                id="dashboardCosts">
-                €0
-            </div>
+            <div id="dashboardRides"></div>
 
         </div>
 
     </section>
 
 
-    <!-- FIETSEN -->
 
-    <section class="card">
+    <!-- ==================================================
+         FIETSEN
+         ================================================== -->
 
-        <h2>Mijn fietsen</h2>
+    <section
+        id="bikes"
+        class="page"
+    >
 
-        <div
-            id="bikeList"
-            class="bike-list">
-        </div>
-
-
-        <button
-            class="primary"
-            onclick="showBikeForm()">
-
-            + Fiets toevoegen
-
-        </button>
+        <h2>🚲 Fietsen</h2>
 
 
-        <div
-            id="bikeForm"
-            class="hidden"
-            style="margin-top:20px;">
+        <div class="card">
 
-            <div class="form-grid">
+            <h3>Nieuwe fiets</h3>
 
-                <div>
+            <form id="bikeForm">
+
+                <div class="form-grid">
 
                     <label>
-                        Naam van de fiets
+                        Naam
+
+                        <input
+                            id="bikeName"
+                            required
+                        >
+
                     </label>
 
-                    <input
-                        id="bikeName"
-                        placeholder="Bijv. Racefiets">
+
+                    <label>
+                        Huidige km
+
+                        <input
+                            id="bikeKm"
+                            type="number"
+                            min="0"
+                            step="0.1"
+                            value="0"
+                            required
+                        >
+
+                    </label>
 
                 </div>
 
-
-                <div>
-
-                    <label>
-                        Huidige kilometerstand
-                    </label>
-
-                    <input
-                        id="bikeKm"
-                        type="number"
-                        min="0"
-                        placeholder="0">
-
-                </div>
-
-            </div>
-
-
-            <div class="form-buttons">
 
                 <button
                     class="primary"
-                    onclick="addBike()">
-
-                    Opslaan
-
+                    type="submit"
+                >
+                    Fiets toevoegen
                 </button>
+
+            </form>
+
+        </div>
+
+
+        <div id="bikesList"></div>
+
+    </section>
+
+
+
+    <!-- ==================================================
+         ONDERDELEN
+         ================================================== -->
+
+    <section
+        id="parts"
+        class="page"
+    >
+
+        <h2>🔧 Onderdelen</h2>
+
+
+        <div class="card">
+
+            <h3>Onderdeel toevoegen</h3>
+
+            <form id="partForm">
+
+                <div class="form-grid">
+
+
+                    <label>
+
+                        Fiets
+
+                        <select
+                            id="partBike"
+                            required
+                        ></select>
+
+                    </label>
+
+
+                    <label>
+
+                        Type
+
+                        <select id="partType">
+
+                            <option value="Ketting">
+                                Ketting
+                            </option>
+
+                            <option value="Banden">
+                                Banden
+                            </option>
+
+                            <option value="Remblokken">
+                                Remblokken
+                            </option>
+
+                            <option value="Cassette">
+                                Cassette
+                            </option>
+
+                            <option value="Kabels">
+                                Kabels
+                            </option>
+
+                            <option value="Trapas">
+                                Trapas
+                            </option>
+
+                            <option value="Andere">
+                                Andere
+                            </option>
+
+                        </select>
+
+                    </label>
+
+
+                    <label>
+
+                        Naam
+
+                        <input
+                            id="partName"
+                            required
+                        >
+
+                    </label>
+
+
+                    <label>
+
+                        Aankoopprijs (€)
+
+                        <input
+                            id="partPrice"
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            required
+                        >
+
+                    </label>
+
+
+                    <label>
+
+                        Gemonteerd bij km
+
+                        <input
+                            id="partInstallKm"
+                            type="number"
+                            min="0"
+                            step="0.1"
+                            required
+                        >
+
+                    </label>
+
+
+                    <label>
+
+                        Onderhoudsinterval (km)
+
+                        <input
+                            id="partInterval"
+                            type="number"
+                            min="1"
+                            step="1"
+                            required
+                        >
+
+                    </label>
+
+                </div>
 
 
                 <button
-                    class="secondary"
-                    onclick="hideBikeForm()">
-
-                    Annuleren
-
+                    class="primary"
+                    type="submit"
+                >
+                    Onderdeel toevoegen
                 </button>
 
-            </div>
+            </form>
 
         </div>
 
-    </section>
-
-
-    <!-- ACTIEVE FIETS -->
-
-    <section class="card">
-
-        <h2 id="activeBikeTitle">
-            Mijn fiets
-        </h2>
-
-
-        <div class="form-grid">
-
-            <div>
-
-                <label>
-                    Naam
-                </label>
-
-                <input
-                    id="editBikeName">
-
-            </div>
-
-
-            <div>
-
-                <label>
-                    Huidige kilometerstand
-                </label>
-
-                <input
-                    id="editBikeKm"
-                    type="number"
-                    min="0">
-
-            </div>
-
-        </div>
-
-
-        <div class="bike-actions">
-
-            <button
-                class="primary"
-                onclick="saveBikeChanges()">
-
-                Wijzigingen opslaan
-
-            </button>
-
-
-            <button
-                class="danger"
-                onclick="deleteActiveBike()">
-
-                Fiets verwijderen
-
-            </button>
-
-        </div>
-
-    </section>
-
-
-    <!-- ONDERDELEN -->
-
-    <section class="card">
-
-        <h2>Onderdelen</h2>
 
         <div id="partsList"></div>
 
-
-        <button
-            class="primary"
-            onclick="showPartForm()">
-
-            + Onderdeel toevoegen
-
-        </button>
-
-
-        <div
-            id="partForm"
-            class="hidden"
-            style="margin-top:20px;">
-
-            <div class="form-grid">
-
-                <div>
-
-                    <label>
-                        Onderdeel
-                    </label>
-
-                    <select
-                        id="partType"
-                        onchange="toggleCustomPart()">
-
-                        <option value="Ketting">
-                            Ketting
-                        </option>
-
-                        <option value="Banden">
-                            Banden
-                        </option>
-
-                        <option value="Remblokken">
-                            Remblokken
-                        </option>
-
-                        <option value="Cassette">
-                            Cassette
-                        </option>
-
-                        <option value="Remschijven">
-                            Remschijven
-                        </option>
-
-                        <option value="Kabels">
-                            Kabels
-                        </option>
-
-                        <option value="Trapas">
-                            Trapas
-                        </option>
-
-                        <option value="Lagers">
-                            Lagers
-                        </option>
-
-                        <option value="Andere">
-                            Andere
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <div
-                    id="customPartContainer"
-                    class="hidden">
-
-                    <label>
-                        Naam van onderdeel
-                    </label>
-
-                    <input
-                        id="customPartName"
-                        placeholder="Bijv. derailleur">
-
-                </div>
-
-
-                <div>
-
-                    <label>
-                        Prijs (€)
-                    </label>
-
-                    <input
-                        id="partPrice"
-                        type="number"
-                        min="0"
-                        step="0.01">
-
-                </div>
-
-
-                <div>
-
-                    <label>
-                        Montage kilometerstand
-                    </label>
-
-                    <input
-                        id="partInstallKm"
-                        type="number"
-                        min="0">
-
-                </div>
-
-
-                <div>
-
-                    <label>
-                        Onderhoudsinterval (km)
-                    </label>
-
-                    <input
-                        id="partInterval"
-                        type="number"
-                        min="0"
-                        placeholder="Bijv. 3000">
-
-                </div>
-
-            </div>
-
-
-            <div class="form-buttons">
-
-                <button
-                    class="primary"
-                    onclick="savePart()">
-
-                    Opslaan
-
-                </button>
-
-
-                <button
-                    class="secondary"
-                    onclick="hidePartForm()">
-
-                    Annuleren
-
-                </button>
-
-            </div>
-
-        </div>
-
     </section>
 
 
-    <!-- ONDERHOUD -->
 
-    <section class="card">
+    <!-- ==================================================
+         ONDERHOUD
+         ================================================== -->
 
-        <h2>Onderhoud</h2>
+    <section
+        id="maintenance"
+        class="page"
+    >
 
-        <div id="maintenanceList"></div>
-
-
-        <button
-            class="primary"
-            onclick="showMaintenanceForm()">
-
-            + Onderhoud toevoegen
-
-        </button>
+        <h2>🛠 Onderhoud</h2>
 
 
-        <div
-            id="maintenanceForm"
-            class="hidden"
-            style="margin-top:20px;">
+        <div class="card">
 
-            <input
-                type="hidden"
-                id="editingMaintenanceId">
+            <h3>Onderhoud toevoegen</h3>
 
+            <form id="maintenanceForm">
 
-            <div class="form-grid">
+                <div class="form-grid">
 
-                <div>
 
                     <label>
-                        Type onderhoud
+
+                        Fiets
+
+                        <select
+                            id="maintenanceBike"
+                            required
+                        ></select>
+
                     </label>
 
-                    <input
-                        id="maintenanceType"
-                        placeholder="Bijv. Fiets volledig nagekeken">
-
-                </div>
-
-
-                <div>
 
                     <label>
+
+                        Type
+
+                        <input
+                            id="maintenanceType"
+                            required
+                        >
+
+                    </label>
+
+
+                    <label>
+
                         Datum
+
+                        <input
+                            id="maintenanceDate"
+                            type="date"
+                            required
+                        >
+
                     </label>
 
-                    <input
-                        id="maintenanceDate"
-                        type="date">
-
-                </div>
-
-
-                <div>
 
                     <label>
-                        Kilometerstand
+
+                        Km
+
+                        <input
+                            id="maintenanceKm"
+                            type="number"
+                            min="0"
+                            step="0.1"
+                            required
+                        >
+
                     </label>
 
-                    <input
-                        id="maintenanceKm"
-                        type="number"
-                        min="0">
-
-                </div>
-
-
-                <div>
 
                     <label>
+
                         Kosten (€)
-                    </label>
 
-                    <input
-                        id="maintenanceCost"
-                        type="number"
-                        min="0"
-                        step="0.01">
+                        <input
+                            id="maintenanceCost"
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            value="0"
+                        >
+
+                    </label>
 
                 </div>
 
 
-                <div class="full">
+                <label>
 
-                    <label>
-                        Notities
-                    </label>
+                    Notities
 
                     <textarea
                         id="maintenanceNotes"
-                        placeholder="Wat heb je gedaan?">
-                    </textarea>
+                    ></textarea>
 
-                </div>
+                </label>
 
-            </div>
-
-
-            <div class="form-buttons">
 
                 <button
                     class="primary"
-                    onclick="saveMaintenance()">
-
-                    Opslaan
-
+                    type="submit"
+                >
+                    Onderhoud toevoegen
                 </button>
 
+            </form>
+
+        </div>
+
+
+        <div id="maintenanceList"></div>
+
+    </section>
+
+
+
+    <!-- ==================================================
+         RITTEN
+         ================================================== -->
+
+    <section
+        id="rides"
+        class="page"
+    >
+
+        <h2>🚴 Ritten</h2>
+
+
+        <div class="card">
+
+            <h3>Strava</h3>
+
+
+            <button
+                id="connectStravaButton"
+                class="strava"
+                type="button"
+            >
+                🔗 Verbinden met Strava
+            </button>
+
+
+            <div
+                id="stravaConnected"
+                class="strava-connected hidden"
+            >
+
+                <span class="strava-dot"></span>
+
+                <span>
+                    ✅ Strava is verbonden
+                </span>
+
+            </div>
+
+
+            <div
+                id="stravaStatus"
+            ></div>
+
+
+            <div class="actions">
 
                 <button
-                    class="secondary"
-                    onclick="hideMaintenanceForm()">
+                    id="refreshRidesButton"
+                    class="primary hidden"
+                    type="button"
+                >
+                    🔄 Ritten ophalen
+                </button>
 
-                    Annuleren
-
+                <button
+                    id="disconnectStravaButton"
+                    class="danger hidden"
+                    type="button"
+                >
+                    Strava ontkoppelen
                 </button>
 
             </div>
 
+
+            <p class="small">
+                Nieuwe ritten worden automatisch gesynchroniseerd.
+            </p>
+
         </div>
 
-    </section>
+
+        <div
+            id="rideDetails"
+            class="card hidden"
+        ></div>
 
 
-    <!-- NIEUWE STAP: ONDERHOUDSOVERZICHT -->
-
-    <section class="card">
-
-        <h2>
-            📊 Onderhoudsoverzicht
-        </h2>
-
-        <div id="maintenanceOverview"></div>
-
-    </section>
-
-
-    <!-- BINNENKORT ONDERHOUD -->
-
-    <section class="card">
-
-        <h2>
-            🔧 Binnenkort onderhoud
-        </h2>
-
-        <div id="upcomingMaintenance"></div>
-
-    </section>
-
-
-    <!-- VERVANGINGSGESCHIEDENIS -->
-
-    <section class="card">
-
-        <h2>
-            Vervangingsgeschiedenis
-        </h2>
-
-        <div id="replacementHistory"></div>
+        <div id="ridesList"></div>
 
     </section>
 
 </main>
 
 
+
 <script>
+
+
+    // ==================================================
+    // OPSLAG
+    // ==================================================
 
     const STORAGE_KEY =
         "bikeMaintenanceBikes";
 
-
-    let bikes = [];
-
-    let activeBikeId = null;
-
-    let editingPartId = null;
+    const RIDE_ASSIGNMENTS_KEY =
+        "bikeMaintenanceStravaAssignments";
 
 
-    /* =========================
-       DATA LADEN
-       ========================= */
-
-    function loadData() {
-
-        const saved =
-            localStorage.getItem(
-                STORAGE_KEY
-            );
+    let bikes = JSON.parse(
+        localStorage.getItem(
+            STORAGE_KEY
+        ) || "[]"
+    );
 
 
-        if (saved) {
-
-            try {
-
-                bikes =
-                    JSON.parse(saved);
-
-            } catch {
-
-                bikes = [];
-
-            }
-
-        }
+    let rideAssignments = JSON.parse(
+        localStorage.getItem(
+            RIDE_ASSIGNMENTS_KEY
+        ) || "{}"
+    );
 
 
-        if (
-            !Array.isArray(bikes) ||
-            bikes.length === 0
-        ) {
-
-            const oldBikeData =
-                JSON.parse(
-                    localStorage.getItem(
-                        "bikeData"
-                    ) || "null"
-                );
+    let stravaActivities = [];
 
 
-            const oldParts =
-                JSON.parse(
-                    localStorage.getItem(
-                        "bikeParts"
-                    ) || "[]"
-                );
 
-
-            const oldMaintenance =
-                JSON.parse(
-                    localStorage.getItem(
-                        "bikeMaintenance"
-                    ) || "[]"
-                );
-
-
-            bikes = [{
-
-                id: Date.now(),
-
-                name:
-                    oldBikeData?.name ||
-                    "Mijn fiets",
-
-                km:
-                    oldBikeData?.km ||
-                    0,
-
-                parts:
-                    Array.isArray(oldParts)
-                        ? oldParts
-                        : [],
-
-                maintenance:
-                    Array.isArray(
-                        oldMaintenance
-                    )
-                        ? oldMaintenance
-                        : []
-
-            }];
-
-
-            bikes.forEach(
-                bike => {
-
-                    bike.parts.forEach(
-                        part => {
-
-                            if (
-                                !Array.isArray(
-                                    part.replacementHistory
-                                )
-                            ) {
-
-                                part.replacementHistory =
-                                    [];
-
-                            }
-
-                        }
-                    );
-
-                }
-            );
-
-
-            saveData();
-
-        }
-
-
-        activeBikeId =
-            bikes[0]?.id ||
-            null;
-
-
-        renderAll();
-
-    }
-
-
-    function saveData() {
+    function saveBikes() {
 
         localStorage.setItem(
             STORAGE_KEY,
@@ -1082,80 +928,217 @@
     }
 
 
-    function getActiveBike() {
+    function saveAssignments() {
 
-        return bikes.find(
-            bike =>
-                bike.id ===
-                activeBikeId
+        localStorage.setItem(
+            RIDE_ASSIGNMENTS_KEY,
+            JSON.stringify(
+                rideAssignments
+            )
         );
 
     }
 
 
-    function renderAll() {
 
-        renderBikes();
+    // ==================================================
+    // HELPERS
+    // ==================================================
 
-        renderActiveBike();
+    function generateId() {
 
-        renderParts();
+        if (
+            typeof crypto !== "undefined" &&
+            crypto.randomUUID
+        ) {
 
-        renderMaintenance();
+            return crypto.randomUUID();
 
-        renderMaintenanceOverview();
+        }
 
-        renderUpcomingMaintenance();
-
-        renderReplacementHistory();
-
-        renderDashboard();
+        return (
+            Date.now().toString(36) +
+            Math.random()
+                .toString(36)
+                .substring(2)
+        );
 
     }
 
 
-    /* =========================
-       DASHBOARD
-       ========================= */
+    function formatNumber(value) {
 
-    function renderDashboard() {
+        return Number(value || 0)
+            .toLocaleString(
+                "nl-BE",
+                {
+                    maximumFractionDigits: 1
+                }
+            );
 
-        let totalKm = 0;
-
-        let totalParts = 0;
-
-        let totalCosts = 0;
-
-
-        bikes.forEach(
-            bike => {
-
-                totalKm +=
-                    Number(bike.km) ||
-                    0;
+    }
 
 
-                bike.parts.forEach(
-                    part => {
+    function money(value) {
 
-                        totalParts++;
+        return new Intl.NumberFormat(
+            "nl-BE",
+            {
+                style: "currency",
+                currency: "EUR"
+            }
+        ).format(
+            Number(value) || 0
+        );
+
+    }
 
 
-                        totalCosts +=
-                            calculatePartTotalCost(
-                                part
+    function formatDate(value) {
+
+        if (!value) {
+            return "-";
+        }
+
+        const date =
+            new Date(value);
+
+        if (
+            Number.isNaN(
+                date.getTime()
+            )
+        ) {
+
+            return "-";
+
+        }
+
+        return date.toLocaleDateString(
+            "nl-BE",
+            {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric"
+            }
+        );
+
+    }
+
+
+    function formatDistance(meters) {
+
+        const km =
+            Number(meters || 0) / 1000;
+
+        return `${km.toLocaleString(
+            "nl-BE",
+            {
+                maximumFractionDigits: 1
+            }
+        )} km`;
+
+    }
+
+
+    function escapeHtml(value) {
+
+        return String(
+            value ?? ""
+        )
+            .replaceAll(
+                "&",
+                "&amp;"
+            )
+            .replaceAll(
+                "<",
+                "&lt;"
+            )
+            .replaceAll(
+                ">",
+                "&gt;"
+            )
+            .replaceAll(
+                '"',
+                "&quot;"
+            )
+            .replaceAll(
+                "'",
+                "&#039;"
+            );
+
+    }
+
+
+
+    // ==================================================
+    // NAVIGATIE
+    // ==================================================
+
+    document
+        .querySelectorAll(
+            ".nav-button"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    async () => {
+
+                        const page =
+                            button.dataset.page;
+
+
+                        document
+                            .querySelectorAll(
+                                ".nav-button"
+                            )
+                            .forEach(
+                                item =>
+                                    item.classList
+                                        .remove(
+                                            "active"
+                                        )
                             );
 
-                    }
-                );
+
+                        document
+                            .querySelectorAll(
+                                ".page"
+                            )
+                            .forEach(
+                                item =>
+                                    item.classList
+                                        .remove(
+                                            "active"
+                                        )
+                            );
 
 
-                bike.maintenance.forEach(
-                    item => {
+                        button.classList.add(
+                            "active"
+                        );
 
-                        totalCosts +=
-                            Number(item.cost) ||
-                            0;
+
+                        document
+                            .getElementById(
+                                page
+                            )
+                            .classList.add(
+                                "active"
+                            );
+
+
+                        renderAll();
+
+
+                        if (
+                            page === "rides"
+                        ) {
+
+                            await checkStravaStatus();
+
+                        }
 
                     }
                 );
@@ -1164,86 +1147,177 @@
         );
 
 
-        document.getElementById(
-            "dashboardBikes"
-        ).textContent =
-            bikes.length;
+
+    // ==================================================
+    // FIETS TOEVOEGEN
+    // ==================================================
+
+    document
+        .getElementById(
+            "bikeForm"
+        )
+        .addEventListener(
+            "submit",
+            event => {
+
+                event.preventDefault();
 
 
-        document.getElementById(
-            "dashboardKm"
-        ).textContent =
-            totalKm.toLocaleString(
-                "nl-BE"
-            ) + " km";
+                const name =
+                    document
+                        .getElementById(
+                            "bikeName"
+                        )
+                        .value
+                        .trim();
 
 
-        document.getElementById(
-            "dashboardParts"
-        ).textContent =
-            totalParts;
+                const km =
+                    Number(
+                        document
+                            .getElementById(
+                                "bikeKm"
+                            )
+                            .value
+                    );
 
 
-        document.getElementById(
-            "dashboardCosts"
-        ).textContent =
-            "€" +
-            totalCosts.toFixed(2);
-
-    }
+                if (!name) {
+                    return;
+                }
 
 
-    /* =========================
-       FIETSEN
-       ========================= */
+                bikes.push({
+
+                    id: generateId(),
+
+                    name,
+
+                    km: Math.max(
+                        0,
+                        km || 0
+                    ),
+
+                    parts: [],
+
+                    maintenance: []
+
+                });
+
+
+                saveBikes();
+
+
+                event.target.reset();
+
+
+                document
+                    .getElementById(
+                        "bikeKm"
+                    )
+                    .value = 0;
+
+
+                renderAll();
+
+            }
+        );
+
+
+
+    // ==================================================
+    // FIETSEN WEERGEVEN
+    // ==================================================
 
     function renderBikes() {
 
         const container =
             document.getElementById(
-                "bikeList"
+                "bikesList"
             );
 
 
         container.innerHTML = "";
 
 
+        if (
+            bikes.length === 0
+        ) {
+
+            container.innerHTML = `
+                <div class="empty">
+                    Nog geen fietsen toegevoegd.
+                </div>
+            `;
+
+            return;
+
+        }
+
+
         bikes.forEach(
             bike => {
 
-                const button =
+                const card =
                     document.createElement(
-                        "button"
+                        "div"
                     );
 
 
-                button.className =
-                    "bike-button " +
-                    (
-                        bike.id ===
-                        activeBikeId
-                            ? "active"
-                            : ""
-                    );
+                card.className =
+                    "bike-card";
 
 
-                button.textContent =
-                    `${bike.name} (${bike.km} km)`;
+                card.innerHTML = `
 
+                    <h3>
+                        ${escapeHtml(
+                            bike.name
+                        )}
+                    </h3>
 
-                button.onclick =
-                    () => {
+                    <p>
+                        <strong>
+                            ${formatNumber(
+                                bike.km
+                            )} km
+                        </strong>
+                    </p>
 
-                        activeBikeId =
-                            bike.id;
+                    <p class="small">
+                        ${bike.parts.length}
+                        onderdeel(en)
+                    </p>
 
-                        renderAll();
+                    <div class="actions">
 
-                    };
+                        <button
+                            class="secondary"
+                            type="button"
+                            onclick="editBike(
+                                '${bike.id}'
+                            )"
+                        >
+                            Bewerken
+                        </button>
+
+                        <button
+                            class="danger"
+                            type="button"
+                            onclick="deleteBike(
+                                '${bike.id}'
+                            )"
+                        >
+                            Verwijderen
+                        </button>
+
+                    </div>
+
+                `;
 
 
                 container.appendChild(
-                    button
+                    card
                 );
 
             }
@@ -1252,154 +1326,62 @@
     }
 
 
-    function renderActiveBike() {
+
+    // ==================================================
+    // FIETS BEWERKEN
+    // ==================================================
+
+    function editBike(
+        bikeId
+    ) {
 
         const bike =
-            getActiveBike();
-
-
-        if (!bike) return;
-
-
-        document.getElementById(
-            "activeBikeTitle"
-        ).textContent =
-            bike.name;
-
-
-        document.getElementById(
-            "editBikeName"
-        ).value =
-            bike.name;
-
-
-        document.getElementById(
-            "editBikeKm"
-        ).value =
-            bike.km;
-
-    }
-
-
-    function showBikeForm() {
-
-        document.getElementById(
-            "bikeForm"
-        ).classList.remove(
-            "hidden"
-        );
-
-    }
-
-
-    function hideBikeForm() {
-
-        document.getElementById(
-            "bikeForm"
-        ).classList.add(
-            "hidden"
-        );
-
-
-        document.getElementById(
-            "bikeName"
-        ).value = "";
-
-
-        document.getElementById(
-            "bikeKm"
-        ).value = "";
-
-    }
-
-
-    function addBike() {
-
-        const name =
-            document.getElementById(
-                "bikeName"
-            ).value.trim();
-
-
-        const km =
-            Number(
-                document.getElementById(
-                    "bikeKm"
-                ).value
-            ) || 0;
-
-
-        if (!name) {
-
-            alert(
-                "Geef je fiets een naam."
+            bikes.find(
+                item =>
+                    item.id === bikeId
             );
 
-            return;
 
+        if (!bike) {
+            return;
         }
 
 
-        const newBike = {
-
-            id: Date.now(),
-
-            name: name,
-
-            km: km,
-
-            parts: [],
-
-            maintenance: []
-
-        };
-
-
-        bikes.push(
-            newBike
-        );
-
-
-        activeBikeId =
-            newBike.id;
-
-
-        saveData();
-
-        hideBikeForm();
-
-        renderAll();
-
-    }
-
-
-    function saveBikeChanges() {
-
-        const bike =
-            getActiveBike();
-
-
-        if (!bike) return;
-
-
         const name =
-            document.getElementById(
-                "editBikeName"
-            ).value.trim();
+            prompt(
+                "Naam van de fiets:",
+                bike.name
+            );
+
+
+        if (name === null) {
+            return;
+        }
+
+
+        const kmInput =
+            prompt(
+                "Huidige kilometers:",
+                bike.km
+            );
+
+
+        if (kmInput === null) {
+            return;
+        }
 
 
         const km =
-            Number(
-                document.getElementById(
-                    "editBikeKm"
-                ).value
-            ) || 0;
+            Number(kmInput);
 
 
-        if (!name) {
+        if (
+            !Number.isFinite(km) ||
+            km < 0
+        ) {
 
             alert(
-                "Geef je fiets een naam."
+                "Geef een geldig aantal kilometers in."
             );
 
             return;
@@ -1408,45 +1390,45 @@
 
 
         bike.name =
-            name;
+            name.trim() || bike.name;
 
 
         bike.km =
             km;
 
 
-        saveData();
+        saveBikes();
+
 
         renderAll();
 
     }
 
 
-    function deleteActiveBike() {
 
-        if (
-            bikes.length <= 1
-        ) {
+    // ==================================================
+    // FIETS VERWIJDEREN
+    // ==================================================
 
-            alert(
-                "Je moet minstens één fiets behouden."
-            );
-
-            return;
-
-        }
-
+    function deleteBike(
+        bikeId
+    ) {
 
         const bike =
-            getActiveBike();
+            bikes.find(
+                item =>
+                    item.id === bikeId
+            );
 
 
-        if (!bike) return;
+        if (!bike) {
+            return;
+        }
 
 
         if (
             !confirm(
-                `Wil je "${bike.name}" verwijderen?\n\nAlle onderdelen, onderhoud en vervangingsgeschiedenis van deze fiets worden verwijderd.`
+                `Fiets "${bike.name}" verwijderen?`
             )
         ) {
 
@@ -1458,310 +1440,183 @@
         bikes =
             bikes.filter(
                 item =>
-                    item.id !==
-                    activeBikeId
+                    item.id !== bikeId
             );
 
 
-        activeBikeId =
-            bikes[0].id;
+        Object.keys(
+            rideAssignments
+        ).forEach(
+            activityId => {
+
+                if (
+                    rideAssignments[
+                        activityId
+                    ] === bikeId
+                ) {
+
+                    delete rideAssignments[
+                        activityId
+                    ];
+
+                }
+
+            }
+        );
 
 
-        saveData();
+        saveBikes();
+        saveAssignments();
+
 
         renderAll();
 
     }
 
 
-    /* =========================
-       ONDERDELEN FORMULIER
-       ========================= */
 
-    function showPartForm(
-        part = null
-    ) {
+    // ==================================================
+    // ONDERDEEL TOEVOEGEN
+    // ==================================================
 
-        editingPartId =
-            part
-                ? part.id
-                : null;
-
-
-        document.getElementById(
+    document
+        .getElementById(
             "partForm"
-        ).classList.remove(
-            "hidden"
-        );
+        )
+        .addEventListener(
+            "submit",
+            event => {
 
+                event.preventDefault();
 
-        if (part) {
 
-            document.getElementById(
-                "partType"
-            ).value =
-                part.type ||
-                "Andere";
+                const bikeId =
+                    document
+                        .getElementById(
+                            "partBike"
+                        )
+                        .value;
 
 
-            document.getElementById(
-                "partPrice"
-            ).value =
-                part.price ||
-                0;
+                const bike =
+                    bikes.find(
+                        item =>
+                            item.id ===
+                            bikeId
+                    );
 
 
-            document.getElementById(
-                "partInstallKm"
-            ).value =
-                part.installKm ||
-                0;
+                if (!bike) {
 
+                    alert(
+                        "Kies eerst een fiets."
+                    );
 
-            document.getElementById(
-                "partInterval"
-            ).value =
-                part.interval ||
-                "";
+                    return;
 
+                }
 
-            if (
-                part.type ===
-                "Andere"
-            ) {
 
-                document.getElementById(
-                    "customPartName"
-                ).value =
-                    part.name ||
-                    "";
+                const type =
+                    document
+                        .getElementById(
+                            "partType"
+                        )
+                        .value;
 
-            }
 
-        } else {
+                const name =
+                    document
+                        .getElementById(
+                            "partName"
+                        )
+                        .value
+                        .trim();
 
-            document.getElementById(
-                "partType"
-            ).value =
-                "Ketting";
 
+                const price =
+                    Number(
+                        document
+                            .getElementById(
+                                "partPrice"
+                            )
+                            .value
+                    );
 
-            document.getElementById(
-                "partPrice"
-            ).value =
-                "";
 
+                const installKm =
+                    Number(
+                        document
+                            .getElementById(
+                                "partInstallKm"
+                            )
+                            .value
+                    );
 
-            document.getElementById(
-                "partInstallKm"
-            ).value =
-                getActiveBike()?.km ||
-                0;
 
+                const interval =
+                    Number(
+                        document
+                            .getElementById(
+                                "partInterval"
+                            )
+                            .value
+                    );
 
-            document.getElementById(
-                "partInterval"
-            ).value =
-                "";
 
+                if (
+                    !name ||
+                    price < 0 ||
+                    installKm < 0 ||
+                    interval <= 0
+                ) {
 
-            document.getElementById(
-                "customPartName"
-            ).value =
-                "";
+                    alert(
+                        "Controleer de ingevoerde gegevens."
+                    );
 
-        }
+                    return;
 
+                }
 
-        toggleCustomPart();
 
-    }
+                bike.parts.push({
 
+                    id: generateId(),
 
-    function hidePartForm() {
+                    type,
 
-        document.getElementById(
-            "partForm"
-        ).classList.add(
-            "hidden"
-        );
+                    name,
 
+                    price,
 
-        editingPartId =
-            null;
-
-    }
-
-
-    function toggleCustomPart() {
-
-        const type =
-            document.getElementById(
-                "partType"
-            ).value;
-
-
-        const container =
-            document.getElementById(
-                "customPartContainer"
-            );
-
-
-        if (
-            type ===
-            "Andere"
-        ) {
-
-            container.classList.remove(
-                "hidden"
-            );
-
-        } else {
-
-            container.classList.add(
-                "hidden"
-            );
-
-        }
-
-    }
-
-
-    function savePart() {
-
-        const bike =
-            getActiveBike();
-
-
-        if (!bike) return;
-
-
-        const type =
-            document.getElementById(
-                "partType"
-            ).value;
-
-
-        const customName =
-            document.getElementById(
-                "customPartName"
-            ).value.trim();
-
-
-        const name =
-            type === "Andere"
-                ? customName
-                : type;
-
-
-        const price =
-            Number(
-                document.getElementById(
-                    "partPrice"
-                ).value
-            ) || 0;
-
-
-        const installKm =
-            Number(
-                document.getElementById(
-                    "partInstallKm"
-                ).value
-            ) || 0;
-
-
-        const interval =
-            Number(
-                document.getElementById(
-                    "partInterval"
-                ).value
-            ) || 0;
-
-
-        if (!name) {
-
-            alert(
-                "Geef een naam voor het onderdeel."
-            );
-
-            return;
-
-        }
-
-
-        if (editingPartId) {
-
-            const part =
-                bike.parts.find(
-                    p =>
-                        p.id ===
-                        editingPartId
-                );
-
-
-            if (part) {
-
-                part.type =
-                    type;
-
-                part.name =
-                    name;
-
-                part.price =
-                    price;
-
-                part.installKm =
-                    installKm;
-
-                part.interval =
-                    interval;
-
-            }
-
-        } else {
-
-            bike.parts.push({
-
-                id: Date.now(),
-
-                type: type,
-
-                name: name,
-
-                price: price,
-
-                installKm:
                     installKm,
 
-                interval:
                     interval,
 
-                replacementHistory:
-                    []
+                    replacementHistory: []
 
-            });
-
-        }
+                });
 
 
-        saveData();
-
-        hidePartForm();
-
-        renderAll();
-
-    }
+                saveBikes();
 
 
-    /* =========================
-       ONDERDELEN WEERGEVEN
-       ========================= */
+                event.target.reset();
+
+
+                renderAll();
+
+            }
+        );
+
+
+
+    // ==================================================
+    // ONDERDELEN WEERGEVEN
+    // ==================================================
 
     function renderParts() {
-
-        const bike =
-            getActiveBike();
-
 
         const container =
             document.getElementById(
@@ -1772,387 +1627,399 @@
         container.innerHTML = "";
 
 
-        if (
-            !bike ||
-            bike.parts.length === 0
-        ) {
-
-            container.innerHTML =
-                `<div class="empty">
-                    Nog geen onderdelen toegevoegd.
-                </div>`;
-
-            return;
-
-        }
+        let hasParts = false;
 
 
-        bike.parts.forEach(
-            part => {
+        bikes.forEach(
+            bike => {
 
-                const currentKm =
-                    Math.max(
-                        0,
-                        Number(bike.km) -
-                        Number(
-                            part.installKm ||
-                            0
-                        )
-                    );
+                bike.parts =
+                    bike.parts || [];
 
 
-                const interval =
-                    Number(
-                        part.interval
-                    ) || 0;
+                bike.parts.forEach(
+                    part => {
+
+                        hasParts = true;
 
 
-                let usedPercentage =
-                    0;
+                        const usedKm =
+                            Math.max(
+                                0,
+                                Number(bike.km || 0) -
+                                Number(part.installKm || 0)
+                            );
 
 
-                let remaining =
-                    0;
+                        const safeInterval =
+                            Math.max(
+                                1,
+                                Number(part.interval) || 1
+                            );
 
 
-                if (
-                    interval > 0
-                ) {
-
-                    usedPercentage =
-                        Math.min(
-                            100,
+                        const percentageUsed =
                             Math.max(
                                 0,
                                 (
-                                    currentKm /
-                                    interval
+                                    usedKm /
+                                    safeInterval
                                 ) * 100
-                            )
-                        );
+                            );
 
 
-                    remaining =
-                        Math.max(
-                            0,
-                            interval -
-                            currentKm
-                        );
-
-                }
+                        const remainingKm =
+                            Math.max(
+                                0,
+                                safeInterval -
+                                usedKm
+                            );
 
 
-                let progressClass =
-                    "progress-green";
+                        const remainingPercentage =
+                            Math.max(
+                                0,
+                                (
+                                    remainingKm /
+                                    safeInterval
+                                ) * 100
+                            );
 
 
-                let statusClass =
-                    "status-good";
+                        /*
+                         * KLEUREN:
+                         *
+                         * Groen:
+                         * minstens 30% levensduur over
+                         *
+                         * Oranje:
+                         * minder dan 30% levensduur over
+                         *
+                         * Rood:
+                         * onderdeel heeft interval bereikt
+                         */
+
+                        let color =
+                            "green";
 
 
-                let statusText =
-                    "Normaal";
+                        if (
+                            remainingKm <= 0
+                        ) {
 
+                            color =
+                                "red";
 
-                /*
-                 * 0-70% gebruikt = groen
-                 * 70-100% gebruikt = oranje
-                 * 100%+ gebruikt = rood
-                 */
+                        } else if (
+                            remainingPercentage < 30
+                        ) {
 
-                if (
-                    interval <= 0
-                ) {
+                            color =
+                                "orange";
 
-                    usedPercentage =
-                        0;
-
-                    progressClass =
-                        "progress-green";
-
-                    statusClass =
-                        "status-good";
-
-                    statusText =
-                        "Geen interval ingesteld";
-
-                } else if (
-                    currentKm >=
-                    interval
-                ) {
-
-                    usedPercentage =
-                        100;
-
-                    progressClass =
-                        "progress-red";
-
-                    statusClass =
-                        "status-danger";
-
-                    statusText =
-                        "Onderhoud nodig";
-
-                } else if (
-                    usedPercentage >=
-                    70
-                ) {
-
-                    progressClass =
-                        "progress-orange";
-
-                    statusClass =
-                        "status-warning";
-
-                    statusText =
-                        "Bijna onderhoud nodig";
-
-                }
-
-
-                const div =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                div.className =
-                    "part";
-
-
-                div.innerHTML = `
-
-                    <div class="part-header">
-
-                        <div class="part-name">
-                            ${escapeHtml(
-                                part.name
-                            )}
-                        </div>
-
-                        <div>
-                            €${Number(
-                                part.price ||
-                                0
-                            ).toFixed(2)}
-                        </div>
-
-                    </div>
-
-
-                    <div class="part-info">
-
-                        Gebruikt:
-                        ${currentKm.toLocaleString(
-                            "nl-BE"
-                        )} km
-
-                        <br>
-
-                        Gemonteerd bij:
-                        ${Number(
-                            part.installKm ||
-                            0
-                        ).toLocaleString(
-                            "nl-BE"
-                        )} km
-
-                        <br>
-
-                        Levensduur:
-                        ${
-                            interval > 0
-                                ? interval.toLocaleString(
-                                    "nl-BE"
-                                ) + " km"
-                                : "Geen interval"
                         }
 
-                    </div>
+
+                        let statusText =
+                            "";
 
 
-                    ${
-                        interval > 0
-                        ? `
-
-                        <div
-                            class="lifespan-container">
-
-                            <div
-                                class="lifespan-top">
-
-                                <span
-                                    class="lifespan-label">
-
-                                    Levensduur gebruikt
-
-                                </span>
+                        let statusClass =
+                            "";
 
 
-                                <span
-                                    class="lifespan-percent ${statusClass}">
+                        if (
+                            color === "green"
+                        ) {
 
-                                    ${Math.round(
-                                        usedPercentage
-                                    )}% gebruikt
+                            statusText =
+                                "🟢 Nog ruim voldoende levensduur over";
 
-                                </span>
+                            statusClass =
+                                "status-green";
 
-                            </div>
+                        } else if (
+                            color === "orange"
+                        ) {
+
+                            statusText =
+                                "🟠 Binnenkort vervangen";
+
+                            statusClass =
+                                "status-orange";
+
+                        } else {
+
+                            statusText =
+                                "🔴 Vervangen / onderhoud nodig";
+
+                            statusClass =
+                                "status-red";
+
+                        }
 
 
-                            <div
-                                class="progress-background">
-
-                                <div
-                                    class="progress-bar ${progressClass}"
-                                    style="width:${usedPercentage}%">
-
-                                </div>
-
-                            </div>
+                        const card =
+                            document.createElement(
+                                "div"
+                            );
 
 
-                            <div
-                                class="progress-text">
+                        card.className =
+                            "part-card";
+
+
+                        card.innerHTML = `
+
+                            <h3>
+                                ${escapeHtml(
+                                    part.name
+                                )}
+                            </h3>
+
+
+                            <p>
+                                <strong>
+                                    Fiets:
+                                </strong>
+
+                                ${escapeHtml(
+                                    bike.name
+                                )}
+                            </p>
+
+
+                            <p>
+                                <strong>
+                                    Type:
+                                </strong>
+
+                                ${escapeHtml(
+                                    part.type
+                                )}
+                            </p>
+
+
+                            <p>
+                                <strong>
+                                    Prijs:
+                                </strong>
+
+                                ${money(
+                                    part.price
+                                )}
+                            </p>
+
+
+                            <p>
+                                <strong>
+                                    Gebruikt:
+                                </strong>
+
+                                ${formatNumber(
+                                    usedKm
+                                )}
+                                /
+                                ${formatNumber(
+                                    safeInterval
+                                )}
+                                km
+
+                                (
+                                ${Math.round(
+                                    percentageUsed
+                                )}%
+                                )
+                            </p>
+
+
+                            <p>
+                                <strong>
+                                    Nog te gebruiken:
+                                </strong>
 
                                 ${
-                                    remaining > 0
-                                    ? `${remaining.toLocaleString(
-                                        "nl-BE"
-                                    )} km kan nog mee`
-                                    : "Het onderhoudsinterval is bereikt"
+                                    remainingKm > 0
+                                        ? `ongeveer ${formatNumber(
+                                            remainingKm
+                                        )} km`
+                                        : "onderhoud nodig"
                                 }
+                            </p>
 
-                                ·
 
-                                <span
-                                    class="${statusClass}">
+                            <p>
+                                <strong>
+                                    Levensduur over:
+                                </strong>
 
-                                    ${statusText}
+                                ${Math.round(
+                                    remainingPercentage
+                                )}%
+                            </p>
 
-                                </span>
+
+                            <div
+                                class="progress-container"
+                                title="${Math.round(
+                                    percentageUsed
+                                )}% gebruikt"
+                            >
+
+                                <div
+                                    class="progress ${color}"
+                                    style="
+                                        width:
+                                        ${Math.min(
+                                            100,
+                                            percentageUsed
+                                        )}%
+                                    "
+                                ></div>
 
                             </div>
 
-                        </div>
 
-                        `
-                        : ""
+                            <p
+                                class="${statusClass}"
+                            >
+                                ${statusText}
+                            </p>
+
+
+                            <div class="actions">
+
+                                <button
+                                    class="secondary"
+                                    type="button"
+                                    onclick="replacePart(
+                                        '${bike.id}',
+                                        '${part.id}'
+                                    )"
+                                >
+                                    🔄 Vervangen
+                                </button>
+
+
+                                <button
+                                    class="secondary"
+                                    type="button"
+                                    onclick="editPart(
+                                        '${bike.id}',
+                                        '${part.id}'
+                                    )"
+                                >
+                                    Bewerken
+                                </button>
+
+
+                                <button
+                                    class="danger"
+                                    type="button"
+                                    onclick="deletePart(
+                                        '${bike.id}',
+                                        '${part.id}'
+                                    )"
+                                >
+                                    Verwijderen
+                                </button>
+
+                            </div>
+
+                        `;
+
+
+                        container.appendChild(
+                            card
+                        );
+
                     }
-
-
-                    <div
-                        class="part-actions">
-
-                        <button
-                            class="secondary"
-                            onclick="showPartFormById(${part.id})">
-
-                            Bewerken
-
-                        </button>
-
-
-                        <button
-                            class="warning"
-                            onclick="replacePart(${part.id})">
-
-                            Vervangen
-
-                        </button>
-
-
-                        <button
-                            class="danger"
-                            onclick="deletePart(${part.id})">
-
-                            Verwijderen
-
-                        </button>
-
-                    </div>
-
-                `;
-
-
-                container.appendChild(
-                    div
                 );
 
             }
         );
 
-    }
 
+        if (!hasParts) {
 
-    function showPartFormById(
-        id
-    ) {
-
-        const bike =
-            getActiveBike();
-
-
-        if (!bike) return;
-
-
-        const part =
-            bike.parts.find(
-                p =>
-                    p.id === id
-            );
-
-
-        if (part) {
-
-            showPartForm(
-                part
-            );
+            container.innerHTML = `
+                <div class="empty">
+                    Nog geen onderdelen toegevoegd.
+                </div>
+            `;
 
         }
 
     }
 
 
-    /* =========================
-       ONDERDEEL VERVANGEN
-       ========================= */
 
-    function replacePart(
-        id
+    // ==================================================
+    // ONDERDEEL BEWERKEN
+    // ==================================================
+
+    function editPart(
+        bikeId,
+        partId
     ) {
 
         const bike =
-            getActiveBike();
+            bikes.find(
+                item =>
+                    item.id === bikeId
+            );
 
 
-        if (!bike) return;
+        if (!bike) {
+            return;
+        }
 
 
         const part =
             bike.parts.find(
-                p =>
-                    p.id === id
+                item =>
+                    item.id === partId
             );
 
 
-        if (!part) return;
+        if (!part) {
+            return;
+        }
 
 
-        const newPrice =
-            Number(
-                prompt(
-                    `Nieuwe prijs voor ${part.name}:`,
-                    part.price ||
-                    0
-                )
+        const name =
+            prompt(
+                "Naam onderdeel:",
+                part.name
+            );
+
+
+        if (name === null) {
+            return;
+        }
+
+
+        const priceInput =
+            prompt(
+                "Prijs:",
+                part.price
+            );
+
+
+        if (priceInput === null) {
+            return;
+        }
+
+
+        const intervalInput =
+            prompt(
+                "Onderhoudsinterval:",
+                part.interval
             );
 
 
         if (
-            isNaN(newPrice) ||
-            newPrice < 0
+            intervalInput === null
         ) {
 
             return;
@@ -2160,92 +2027,75 @@
         }
 
 
+        const price =
+            Number(priceInput);
+
+
+        const interval =
+            Number(intervalInput);
+
+
         if (
-            !Array.isArray(
-                part.replacementHistory
-            )
+            !Number.isFinite(price) ||
+            price < 0 ||
+            !Number.isFinite(interval) ||
+            interval <= 0
         ) {
 
-            part.replacementHistory =
-                [];
+            alert(
+                "Ongeldige gegevens."
+            );
+
+            return;
 
         }
 
 
-        part.replacementHistory.push({
-
-            id: Date.now(),
-
-            date:
-                new Date()
-                    .toISOString(),
-
-            oldPrice:
-                Number(
-                    part.price
-                ) || 0,
-
-            newPrice:
-                newPrice,
-
-            oldInstallKm:
-                Number(
-                    part.installKm
-                ) || 0,
-
-            newInstallKm:
-                Number(
-                    bike.km
-                ) || 0
-
-        });
+        part.name =
+            name.trim() || part.name;
 
 
         part.price =
-            newPrice;
+            price;
 
 
-        part.installKm =
-            Number(
-                bike.km
-            ) || 0;
+        part.interval =
+            interval;
 
 
-        saveData();
+        saveBikes();
+
 
         renderAll();
 
     }
 
 
-    /* =========================
-       ONDERDEEL VERWIJDEREN
-       ========================= */
+
+    // ==================================================
+    // ONDERDEEL VERWIJDEREN
+    // ==================================================
 
     function deletePart(
-        id
+        bikeId,
+        partId
     ) {
 
         const bike =
-            getActiveBike();
-
-
-        if (!bike) return;
-
-
-        const part =
-            bike.parts.find(
-                p =>
-                    p.id === id
+            bikes.find(
+                item =>
+                    item.id === bikeId
             );
 
 
-        if (!part) return;
+        if (!bike) {
+            return;
+        }
 
 
         if (
             !confirm(
-                `Wil je "${part.name}" verwijderen?\n\nDe volledige vervangingsgeschiedenis van dit onderdeel wordt ook verwijderd.`
+                "Dit onderdeel verwijderen?"
             )
         ) {
 
@@ -2256,202 +2106,84 @@
 
         bike.parts =
             bike.parts.filter(
-                p =>
-                    p.id !== id
+                part =>
+                    part.id !== partId
             );
 
 
-        saveData();
+        saveBikes();
+
 
         renderAll();
 
     }
 
 
-    /* =========================
-       ONDERHOUD FORMULIER
-       ========================= */
 
-    function showMaintenanceForm(
-        item = null
+    // ==================================================
+    // ONDERDEEL VERVANGEN
+    // ==================================================
+
+    function replacePart(
+        bikeId,
+        partId
     ) {
 
         const bike =
-            getActiveBike();
+            bikes.find(
+                item =>
+                    item.id === bikeId
+            );
 
 
-        if (!bike) return;
+        if (!bike) {
+            return;
+        }
 
 
-        document.getElementById(
-            "maintenanceForm"
-        ).classList.remove(
-            "hidden"
-        );
+        const part =
+            bike.parts.find(
+                item =>
+                    item.id === partId
+            );
 
 
-        if (item) {
-
-            document.getElementById(
-                "editingMaintenanceId"
-            ).value =
-                item.id;
+        if (!part) {
+            return;
+        }
 
 
-            document.getElementById(
-                "maintenanceType"
-            ).value =
-                item.type ||
-                "";
+        const newPriceInput =
+            prompt(
+                "Prijs van het nieuwe onderdeel:",
+                part.price
+            );
 
 
-            document.getElementById(
-                "maintenanceDate"
-            ).value =
-                item.date ||
-                "";
+        if (
+            newPriceInput === null
+        ) {
 
-
-            document.getElementById(
-                "maintenanceKm"
-            ).value =
-                item.km ??
-                bike.km;
-
-
-            document.getElementById(
-                "maintenanceCost"
-            ).value =
-                item.cost ||
-                0;
-
-
-            document.getElementById(
-                "maintenanceNotes"
-            ).value =
-                item.notes ||
-                "";
-
-
-        } else {
-
-            document.getElementById(
-                "editingMaintenanceId"
-            ).value =
-                "";
-
-
-            document.getElementById(
-                "maintenanceType"
-            ).value =
-                "";
-
-
-            document.getElementById(
-                "maintenanceDate"
-            ).value =
-                new Date()
-                    .toISOString()
-                    .split("T")[0];
-
-
-            document.getElementById(
-                "maintenanceKm"
-            ).value =
-                bike.km;
-
-
-            document.getElementById(
-                "maintenanceCost"
-            ).value =
-                "";
-
-
-            document.getElementById(
-                "maintenanceNotes"
-            ).value =
-                "";
+            return;
 
         }
 
-    }
 
-
-    function hideMaintenanceForm() {
-
-        document.getElementById(
-            "maintenanceForm"
-        ).classList.add(
-            "hidden"
-        );
-
-
-        document.getElementById(
-            "editingMaintenanceId"
-        ).value =
-            "";
-
-    }
-
-
-    function saveMaintenance() {
-
-        const bike =
-            getActiveBike();
-
-
-        if (!bike) return;
-
-
-        const editingId =
+        const newPrice =
             Number(
-                document.getElementById(
-                    "editingMaintenanceId"
-                ).value
+                newPriceInput
+            );
+
+
+        if (
+            !Number.isFinite(
+                newPrice
             ) ||
-            null;
-
-
-        const type =
-            document.getElementById(
-                "maintenanceType"
-            ).value.trim();
-
-
-        const date =
-            document.getElementById(
-                "maintenanceDate"
-            ).value;
-
-
-        const km =
-            Number(
-                document.getElementById(
-                    "maintenanceKm"
-                ).value
-            ) ||
-            0;
-
-
-        const cost =
-            Number(
-                document.getElementById(
-                    "maintenanceCost"
-                ).value
-            ) ||
-            0;
-
-
-        const notes =
-            document.getElementById(
-                "maintenanceNotes"
-            ).value.trim();
-
-
-        if (!type) {
+            newPrice < 0
+        ) {
 
             alert(
-                "Geef het onderhoud een naam."
+                "Ongeldige prijs."
             );
 
             return;
@@ -2459,75 +2191,183 @@
         }
 
 
-        if (editingId) {
-
-            const item =
-                bike.maintenance.find(
-                    m =>
-                        m.id ===
-                        editingId
-                );
+        part.replacementHistory =
+            part.replacementHistory ||
+            [];
 
 
-            if (item) {
+        part.replacementHistory.push({
 
-                item.type =
-                    type;
+            id: generateId(),
 
-                item.date =
-                    date;
+            date:
+                new Date()
+                    .toISOString()
+                    .split("T")[0],
 
-                item.km =
-                    km;
+            oldPrice:
+                part.price,
 
-                item.cost =
-                    cost;
+            newPrice,
 
-                item.notes =
-                    notes;
+            oldInstallKm:
+                part.installKm,
 
-            }
+            newInstallKm:
+                bike.km
 
-        } else {
-
-            bike.maintenance.push({
-
-                id: Date.now(),
-
-                type:
-                    type,
-
-                date:
-                    date,
-
-                km:
-                    km,
-
-                cost:
-                    cost,
-
-                notes:
-                    notes
-
-            });
-
-        }
+        });
 
 
-        saveData();
+        part.price =
+            newPrice;
 
-        hideMaintenanceForm();
+
+        part.installKm =
+            bike.km;
+
+
+        saveBikes();
+
 
         renderAll();
 
     }
 
 
+
+    // ==================================================
+    // ONDERHOUD TOEVOEGEN
+    // ==================================================
+
+    document
+        .getElementById(
+            "maintenanceForm"
+        )
+        .addEventListener(
+            "submit",
+            event => {
+
+                event.preventDefault();
+
+
+                const bikeId =
+                    document
+                        .getElementById(
+                            "maintenanceBike"
+                        )
+                        .value;
+
+
+                const bike =
+                    bikes.find(
+                        item =>
+                            item.id ===
+                            bikeId
+                    );
+
+
+                if (!bike) {
+
+                    alert(
+                        "Kies een fiets."
+                    );
+
+                    return;
+
+                }
+
+
+                const type =
+                    document
+                        .getElementById(
+                            "maintenanceType"
+                        )
+                        .value
+                        .trim();
+
+
+                const date =
+                    document
+                        .getElementById(
+                            "maintenanceDate"
+                        )
+                        .value;
+
+
+                const km =
+                    Number(
+                        document
+                            .getElementById(
+                                "maintenanceKm"
+                            )
+                            .value
+                    );
+
+
+                const cost =
+                    Number(
+                        document
+                            .getElementById(
+                                "maintenanceCost"
+                            )
+                            .value
+                    );
+
+
+                const notes =
+                    document
+                        .getElementById(
+                            "maintenanceNotes"
+                        )
+                        .value
+                        .trim();
+
+
+                bike.maintenance =
+                    bike.maintenance ||
+                    [];
+
+
+                bike.maintenance.push({
+
+                    id: generateId(),
+
+                    type,
+
+                    date,
+
+                    km,
+
+                    cost:
+                        Math.max(
+                            0,
+                            cost || 0
+                        ),
+
+                    notes
+
+                });
+
+
+                saveBikes();
+
+
+                event.target.reset();
+
+
+                renderAll();
+
+            }
+        );
+
+
+
+    // ==================================================
+    // ONDERHOUD WEERGEVEN
+    // ==================================================
+
     function renderMaintenance() {
-
-        const bike =
-            getActiveBike();
-
 
         const container =
             document.getElementById(
@@ -2538,319 +2378,29 @@
         container.innerHTML = "";
 
 
-        if (
-            !bike ||
-            bike.maintenance.length === 0
-        ) {
-
-            container.innerHTML =
-                `<div class="empty">
-                    Nog geen onderhoud geregistreerd.
-                </div>`;
-
-            return;
-
-        }
-
-
-        const sorted =
-            [...bike.maintenance].sort(
-                (a, b) =>
-                    new Date(b.date) -
-                    new Date(a.date)
-            );
-
-
-        sorted.forEach(
-            item => {
-
-                const div =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                div.className =
-                    "maintenance-item";
-
-
-                div.innerHTML = `
-
-                    <div
-                        class="maintenance-header">
-
-                        <div
-                            class="maintenance-title">
-
-                            ${escapeHtml(
-                                item.type
-                            )}
-
-                        </div>
-
-
-                        <div>
-
-                            €${Number(
-                                item.cost ||
-                                0
-                            ).toFixed(2)}
-
-                        </div>
-
-                    </div>
-
-
-                    <div
-                        class="maintenance-info">
-
-                        📅 ${formatDate(
-                            item.date
-                        )}
-
-                        <br>
-
-                        🚴 ${Number(
-                            item.km ||
-                            0
-                        ).toLocaleString(
-                            "nl-BE"
-                        )} km
-
-                        ${
-                            item.notes
-                                ? `<br>📝 ${escapeHtml(
-                                    item.notes
-                                )}`
-                                : ""
-                        }
-
-                    </div>
-
-
-                    <div
-                        class="part-actions">
-
-                        <button
-                            class="secondary"
-                            onclick="editMaintenance(${item.id})">
-
-                            Bewerken
-
-                        </button>
-
-
-                        <button
-                            class="danger"
-                            onclick="deleteMaintenance(${item.id})">
-
-                            Verwijderen
-
-                        </button>
-
-                    </div>
-
-                `;
-
-
-                container.appendChild(
-                    div
-                );
-
-            }
-        );
-
-    }
-
-
-    function editMaintenance(
-        id
-    ) {
-
-        const bike =
-            getActiveBike();
-
-
-        if (!bike) return;
-
-
-        const item =
-            bike.maintenance.find(
-                m =>
-                    m.id === id
-            );
-
-
-        if (item) {
-
-            showMaintenanceForm(
-                item
-            );
-
-        }
-
-    }
-
-
-    function deleteMaintenance(
-        id
-    ) {
-
-        const bike =
-            getActiveBike();
-
-
-        if (!bike) return;
-
-
-        const item =
-            bike.maintenance.find(
-                m =>
-                    m.id === id
-            );
-
-
-        if (!item) return;
-
-
-        if (
-            !confirm(
-                `Wil je "${item.type}" verwijderen?`
-            )
-        ) {
-
-            return;
-
-        }
-
-
-        bike.maintenance =
-            bike.maintenance.filter(
-                m =>
-                    m.id !== id
-            );
-
-
-        saveData();
-
-        renderAll();
-
-    }
-
-
-    /* =========================
-       NIEUWE STAP:
-       ONDERHOUDSOVERZICHT
-       ========================= */
-
-    function renderMaintenanceOverview() {
-
-        const container =
-            document.getElementById(
-                "maintenanceOverview"
-            );
-
-
-        container.innerHTML = "";
-
-
-        const allParts = [];
+        const all = [];
 
 
         bikes.forEach(
             bike => {
 
-                bike.parts.forEach(
-                    part => {
-
-                        const interval =
-                            Number(
-                                part.interval
-                            ) || 0;
+                bike.maintenance =
+                    bike.maintenance ||
+                    [];
 
 
-                        if (
-                            interval <= 0
-                        ) {
+                bike.maintenance.forEach(
+                    record => {
 
-                            return;
+                        all.push({
 
-                        }
+                            ...record,
 
+                            bikeId:
+                                bike.id,
 
-                        const used =
-                            Math.max(
-                                0,
-                                Number(
-                                    bike.km
-                                ) -
-                                Number(
-                                    part.installKm ||
-                                    0
-                                )
-                            );
-
-
-                        const remaining =
-                            Math.max(
-                                0,
-                                interval -
-                                used
-                            );
-
-
-                        const percentage =
-                            Math.min(
-                                100,
-                                (
-                                    used /
-                                    interval
-                                ) * 100
-                            );
-
-
-                        let status =
-                            "Normaal";
-
-
-                        if (
-                            used >=
-                            interval
-                        ) {
-
-                            status =
-                                "Onderhoud nodig";
-
-                        } else if (
-                            percentage >=
-                            70
-                        ) {
-
-                            status =
-                                "Bijna onderhoud nodig";
-
-                        }
-
-
-                        allParts.push({
-
-                            bike:
-                                bike.name,
-
-                            part:
-                                part.name,
-
-                            used:
-                                used,
-
-                            remaining:
-                                remaining,
-
-                            percentage:
-                                percentage,
-
-                            status:
-                                status
+                            bikeName:
+                                bike.name
 
                         });
 
@@ -2861,144 +2411,109 @@
         );
 
 
+        all.sort(
+            (a, b) =>
+                new Date(b.date) -
+                new Date(a.date)
+        );
+
+
         if (
-            allParts.length === 0
+            all.length === 0
         ) {
 
-            container.innerHTML =
-                `<div class="empty">
-                    Voeg onderhoudsintervallen toe aan je onderdelen om hier een overzicht te krijgen.
-                </div>`;
+            container.innerHTML = `
+                <div class="empty">
+                    Nog geen onderhoud geregistreerd.
+                </div>
+            `;
 
             return;
 
         }
 
 
-        allParts.sort(
-            (a, b) =>
-                b.percentage -
-                a.percentage
-        );
+        all.forEach(
+            record => {
 
-
-        allParts.forEach(
-            item => {
-
-                let statusClass =
-                    "status-good";
-
-
-                if (
-                    item.status ===
-                    "Bijna onderhoud nodig"
-                ) {
-
-                    statusClass =
-                        "status-warning";
-
-                } else if (
-                    item.status ===
-                    "Onderhoud nodig"
-                ) {
-
-                    statusClass =
-                        "status-danger";
-
-                }
-
-
-                const div =
+                const card =
                     document.createElement(
                         "div"
                     );
 
 
-                div.className =
-                    "overview-part";
+                card.className =
+                    "maintenance-card";
 
 
-                div.innerHTML = `
+                card.innerHTML = `
 
-                    <div
-                        class="overview-header">
-
-                        <div>
-
-                            <div
-                                class="overview-name">
-
-                                ${escapeHtml(
-                                    item.part
-                                )}
-
-                            </div>
+                    <h3>
+                        ${escapeHtml(
+                            record.type
+                        )}
+                    </h3>
 
 
-                            <div
-                                class="overview-bike">
+                    <p>
 
-                                ${escapeHtml(
-                                    item.bike
-                                )}
-
-                            </div>
-
-                        </div>
-
-
-                        <strong
-                            class="${statusClass}">
-
-                            ${Math.round(
-                                item.percentage
-                            )}% gebruikt
-
+                        <strong>
+                            Fiets:
                         </strong>
 
-                    </div>
+                        ${escapeHtml(
+                            record.bikeName
+                        )}
+
+                    </p>
 
 
-                    <div
-                        class="progress-background"
-                        style="margin-top:10px;">
+                    <p>
 
-                        <div
-                            class="progress-bar ${
-                                item.status ===
-                                "Onderhoud nodig"
-                                    ? "progress-red"
-                                    : item.status ===
-                                      "Bijna onderhoud nodig"
-                                        ? "progress-orange"
-                                        : "progress-green"
-                            }"
-                            style="width:${item.percentage}%">
-
-                        </div>
-
-                    </div>
-
-
-                    <div
-                        class="progress-text">
-
-                        ${
-                            item.remaining > 0
-                                ? `${item.remaining.toLocaleString(
-                                    "nl-BE"
-                                )} km resterend`
-                                : "Interval bereikt"
-                        }
+                        ${formatDate(
+                            record.date
+                        )}
 
                         ·
 
-                        <span
-                            class="${statusClass}">
+                        ${formatNumber(
+                            record.km
+                        )} km
 
-                            ${item.status}
+                        ·
 
-                        </span>
+                        ${money(
+                            record.cost
+                        )}
+
+                    </p>
+
+
+                    ${
+                        record.notes
+                            ? `
+                                <p>
+                                    ${escapeHtml(
+                                        record.notes
+                                    )}
+                                </p>
+                            `
+                            : ""
+                    }
+
+
+                    <div class="actions">
+
+                        <button
+                            class="danger"
+                            type="button"
+                            onclick="deleteMaintenance(
+                                '${record.bikeId}',
+                                '${record.id}'
+                            )"
+                        >
+                            Verwijderen
+                        </button>
 
                     </div>
 
@@ -3006,7 +2521,7 @@
 
 
                 container.appendChild(
-                    div
+                    card
                 );
 
             }
@@ -3015,9 +2530,179 @@
     }
 
 
-    /* =========================
-       BINNENKORT ONDERHOUD
-       ========================= */
+
+    // ==================================================
+    // ONDERHOUD VERWIJDEREN
+    // ==================================================
+
+    function deleteMaintenance(
+        bikeId,
+        maintenanceId
+    ) {
+
+        const bike =
+            bikes.find(
+                item =>
+                    item.id === bikeId
+            );
+
+
+        if (!bike) {
+            return;
+        }
+
+
+        if (
+            !confirm(
+                "Dit onderhoud verwijderen?"
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        bike.maintenance =
+            bike.maintenance.filter(
+                item =>
+                    item.id !==
+                    maintenanceId
+            );
+
+
+        saveBikes();
+
+
+        renderAll();
+
+    }
+
+
+
+    // ==================================================
+    // DASHBOARD
+    // ==================================================
+
+    function renderDashboard() {
+
+        let totalKm = 0;
+
+        let partCount = 0;
+
+        let totalCost = 0;
+
+
+        bikes.forEach(
+            bike => {
+
+                totalKm +=
+                    Number(
+                        bike.km || 0
+                    );
+
+
+                bike.parts =
+                    bike.parts || [];
+
+
+                bike.maintenance =
+                    bike.maintenance ||
+                    [];
+
+
+                partCount +=
+                    bike.parts.length;
+
+
+                bike.parts.forEach(
+                    part => {
+
+                        totalCost +=
+                            Number(
+                                part.price || 0
+                            );
+
+
+                        (
+                            part.replacementHistory ||
+                            []
+                        ).forEach(
+                            replacement => {
+
+                                totalCost +=
+                                    Number(
+                                        replacement.newPrice ||
+                                        0
+                                    );
+
+                            }
+                        );
+
+                    }
+                );
+
+
+                bike.maintenance.forEach(
+                    record => {
+
+                        totalCost +=
+                            Number(
+                                record.cost || 0
+                            );
+
+                    }
+                );
+
+            }
+        );
+
+
+        document
+            .getElementById(
+                "dashboardBikeCount"
+            )
+            .textContent =
+                bikes.length;
+
+
+        document
+            .getElementById(
+                "dashboardTotalKm"
+            )
+            .textContent =
+                `${formatNumber(
+                    totalKm
+                )} km`;
+
+
+        document
+            .getElementById(
+                "dashboardPartCount"
+            )
+            .textContent =
+                partCount;
+
+
+        document
+            .getElementById(
+                "dashboardTotalCost"
+            )
+            .textContent =
+                money(totalCost);
+
+
+        renderUpcomingMaintenance();
+
+        renderDashboardRides();
+
+    }
+
+
+
+    // ==================================================
+    // BINNENKORT ONDERHOUD
+    // ==================================================
 
     function renderUpcomingMaintenance() {
 
@@ -3036,53 +2721,34 @@
         bikes.forEach(
             bike => {
 
+                bike.parts =
+                    bike.parts || [];
+
+
                 bike.parts.forEach(
                     part => {
 
-                        const interval =
-                            Number(
-                                part.interval
-                            ) || 0;
-
-
-                        if (
-                            interval <= 0
-                        ) return;
-
-
-                        const used =
-                            Math.max(
-                                0,
-                                Number(
-                                    bike.km
-                                ) -
-                                Number(
-                                    part.installKm ||
-                                    0
-                                )
-                            );
+                        const usedKm =
+                            Number(bike.km || 0) -
+                            Number(part.installKm || 0);
 
 
                         const remaining =
-                            interval -
-                            used;
+                            Number(part.interval || 0) -
+                            usedKm;
 
 
                         if (
-                            remaining <=
-                            500
+                            remaining <= 500
                         ) {
 
                             upcoming.push({
 
-                                bike:
-                                    bike.name,
+                                bike,
 
-                                part:
-                                    part.name,
+                                part,
 
-                                remaining:
-                                    remaining
+                                remaining
 
                             });
 
@@ -3099,10 +2765,11 @@
             upcoming.length === 0
         ) {
 
-            container.innerHTML =
-                `<div class="empty">
-                    🎉 Geen onderhoud dat binnenkort nodig is.
-                </div>`;
+            container.innerHTML = `
+                <p class="small">
+                    Geen onderhoud gepland binnen 500 km.
+                </p>
+            `;
 
             return;
 
@@ -3126,204 +2793,66 @@
 
 
                 div.className =
-                    "upcoming";
+                    "maintenance-card";
 
 
                 let text;
 
 
                 if (
-                    item.remaining <=
-                    0
+                    item.remaining <= 0
                 ) {
 
                     text =
-                        `<strong>${escapeHtml(
-                            item.part
-                        )}</strong>
-                        op
-                        <strong>${escapeHtml(
-                            item.bike
-                        )}</strong>
-                        heeft onderhoud nodig.`;
+                        `<span class="status-red">
+                            🔴 Onderhoud nodig
+                        </span>`;
+
+                } else if (
+                    item.remaining <
+                    Number(
+                        item.part.interval || 1
+                    ) * 0.3
+                ) {
+
+                    text =
+                        `<span class="status-orange">
+                            🟠 Nog ongeveer
+                            ${formatNumber(
+                                item.remaining
+                            )} km
+                        </span>`;
 
                 } else {
 
                     text =
-                        `<strong>${escapeHtml(
-                            item.part
-                        )}</strong>
-                        op
-                        <strong>${escapeHtml(
-                            item.bike
-                        )}</strong>
-                        heeft binnen
-                        <strong>${item.remaining.toLocaleString(
-                            "nl-BE"
-                        )} km</strong>
-                        onderhoud nodig.`;
+                        `<span class="status-green">
+                            🟢 Nog ongeveer
+                            ${formatNumber(
+                                item.remaining
+                            )} km
+                        </span>`;
 
                 }
-
-
-                div.innerHTML =
-                    text;
-
-
-                container.appendChild(
-                    div
-                );
-
-            }
-        );
-
-    }
-
-
-    /* =========================
-       VERVANGINGSGESCHIEDENIS
-       ========================= */
-
-    function renderReplacementHistory() {
-
-        const container =
-            document.getElementById(
-                "replacementHistory"
-            );
-
-
-        container.innerHTML = "";
-
-
-        const history = [];
-
-
-        bikes.forEach(
-            bike => {
-
-                bike.parts.forEach(
-                    part => {
-
-                        if (
-                            !Array.isArray(
-                                part.replacementHistory
-                            )
-                        ) {
-
-                            return;
-
-                        }
-
-
-                        part.replacementHistory.forEach(
-                            item => {
-
-                                history.push({
-
-                                    bikeName:
-                                        bike.name,
-
-                                    partName:
-                                        part.name,
-
-                                    date:
-                                        item.date,
-
-                                    oldPrice:
-                                        item.oldPrice,
-
-                                    newPrice:
-                                        item.newPrice,
-
-                                    oldInstallKm:
-                                        item.oldInstallKm,
-
-                                    newInstallKm:
-                                        item.newInstallKm
-
-                                });
-
-                            }
-                        );
-
-                    }
-                );
-
-            }
-        );
-
-
-        if (
-            history.length === 0
-        ) {
-
-            container.innerHTML =
-                `<div class="empty">
-                    Nog geen vervangingen geregistreerd.
-                </div>`;
-
-            return;
-
-        }
-
-
-        history.sort(
-            (a, b) =>
-                new Date(b.date) -
-                new Date(a.date)
-        );
-
-
-        history.forEach(
-            item => {
-
-                const div =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                div.className =
-                    "history-item";
 
 
                 div.innerHTML = `
 
                     <strong>
                         ${escapeHtml(
-                            item.partName
+                            item.part.name
                         )}
                     </strong>
 
                     <br>
 
-                    🚴 ${escapeHtml(
-                        item.bikeName
+                    ${escapeHtml(
+                        item.bike.name
                     )}
 
                     <br>
 
-                    📅 ${formatDate(
-                        item.date
-                    )}
-
-                    <br>
-
-                    Kilometerstand:
-                    ${Number(
-                        item.newInstallKm ||
-                        0
-                    ).toLocaleString(
-                        "nl-BE"
-                    )} km
-
-                    <br>
-
-                    Prijs:
-                    €${Number(
-                        item.newPrice ||
-                        0
-                    ).toFixed(2)}
+                    ${text}
 
                 `;
 
@@ -3338,114 +2867,1292 @@
     }
 
 
-    /* =========================
-       KOSTEN
-       ========================= */
 
-    function calculatePartTotalCost(
-        part
-    ) {
+    // ==================================================
+    // DASHBOARD STRAVA-RITTEN
+    // ==================================================
 
-        let total =
-            Number(
-                part.price
-            ) || 0;
+    function renderDashboardRides() {
 
-
-        if (
-            Array.isArray(
-                part.replacementHistory
-            )
-        ) {
-
-            part.replacementHistory.forEach(
-                replacement => {
-
-                    total +=
-                        Number(
-                            replacement.oldPrice
-                        ) || 0;
-
-                }
+        const container =
+            document.getElementById(
+                "dashboardRides"
             );
 
+
+        if (!container) {
+            return;
         }
 
 
-        return total;
-
-    }
-
-
-    /* =========================
-       HULPFUNCTIES
-       ========================= */
-
-    function formatDate(
-        date
-    ) {
-
-        if (!date) {
-
-            return "Geen datum";
-
-        }
-
-
-        const d =
-            new Date(date);
+        container.innerHTML = "";
 
 
         if (
-            isNaN(d)
+            stravaActivities.length === 0
         ) {
 
-            return date;
+            container.innerHTML = `
+                <p class="small">
+                    Nog geen Strava-ritten beschikbaar.
+                </p>
+            `;
+
+            return;
 
         }
 
 
-        return d.toLocaleDateString(
-            "nl-BE"
+        const recent =
+            stravaActivities
+                .slice(0, 5);
+
+
+        recent.forEach(
+            activity => {
+
+                const card =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                card.className =
+                    "ride-card";
+
+
+                const bikeId =
+                    rideAssignments[
+                        String(activity.id)
+                    ];
+
+
+                const bike =
+                    bikes.find(
+                        item =>
+                            item.id === bikeId
+                    );
+
+
+                card.innerHTML = `
+
+                    <div class="ride-title">
+
+                        ${escapeHtml(
+                            activity.name ||
+                            "Fietstocht"
+                        )}
+
+                    </div>
+
+
+                    <div class="ride-distance">
+
+                        ${formatDistance(
+                            activity.distance
+                        )}
+
+                    </div>
+
+
+                    <div class="ride-meta">
+
+                        ${formatDate(
+                            activity.start_date ||
+                            activity.start_date_local
+                        )}
+
+                        ${
+                            bike
+                                ? `<br>🚲 ${escapeHtml(
+                                    bike.name
+                                )}`
+                                : "<br>⚪ Nog geen fiets toegewezen"
+                        }
+
+                    </div>
+
+                `;
+
+
+                card.addEventListener(
+                    "click",
+                    () => {
+
+                        document
+                            .querySelector(
+                                '[data-page="rides"]'
+                            )
+                            .click();
+
+
+                        setTimeout(
+                            () =>
+                                openRideDetails(
+                                    activity.id
+                                ),
+                            100
+                        );
+
+                    }
+                );
+
+
+                container.appendChild(
+                    card
+                );
+
+            }
         );
 
     }
 
 
-    function escapeHtml(
-        value
-    ) {
 
-        return String(value)
-            .replace(
-                /&/g,
-                "&amp;"
-            )
-            .replace(
-                /</g,
-                "&lt;"
-            )
-            .replace(
-                />/g,
-                "&gt;"
-            )
-            .replace(
-                /"/g,
-                "&quot;"
-            )
-            .replace(
-                /'/g,
-                "&#039;"
+    // ==================================================
+    // STRAVA STATUS
+    // ==================================================
+
+    async function checkStravaStatus() {
+
+        const connectButton =
+            document.getElementById(
+                "connectStravaButton"
             );
+
+
+        const connectedBox =
+            document.getElementById(
+                "stravaConnected"
+            );
+
+
+        const refreshButton =
+            document.getElementById(
+                "refreshRidesButton"
+            );
+
+
+        const disconnectButton =
+            document.getElementById(
+                "disconnectStravaButton"
+            );
+
+
+        const status =
+            document.getElementById(
+                "stravaStatus"
+            );
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/strava/status"
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (
+                data.connected
+            ) {
+
+                connectButton.classList.add(
+                    "hidden"
+                );
+
+
+                connectedBox.classList.remove(
+                    "hidden"
+                );
+
+
+                refreshButton.classList.remove(
+                    "hidden"
+                );
+
+
+                disconnectButton.classList.remove(
+                    "hidden"
+                );
+
+
+                status.innerHTML = `
+                    <div class="message success-message">
+                        Strava is verbonden.
+                    </div>
+                `;
+
+
+                await loadRides();
+
+
+            } else {
+
+                connectButton.classList.remove(
+                    "hidden"
+                );
+
+
+                connectedBox.classList.add(
+                    "hidden"
+                );
+
+
+                refreshButton.classList.add(
+                    "hidden"
+                );
+
+
+                disconnectButton.classList.add(
+                    "hidden"
+                );
+
+
+                status.innerHTML = `
+                    <div class="message info">
+                        Verbind je Strava-account om je ritten te bekijken.
+                    </div>
+                `;
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Strava status fout:",
+                error
+            );
+
+
+            status.innerHTML = `
+                <div class="message error">
+                    Strava-status kon niet worden opgehaald.
+                </div>
+            `;
+
+        }
 
     }
 
 
-    /* =========================
-       START
-       ========================= */
 
-    loadData();
+    // ==================================================
+    // STRAVA VERBINDEN
+    // ==================================================
+
+    document
+        .getElementById(
+            "connectStravaButton"
+        )
+        .addEventListener(
+            "click",
+            () => {
+
+                window.location.href =
+                    "/api/strava/auth";
+
+            }
+        );
+
+
+
+    // ==================================================
+    // STRAVA ONTKOPPELEN
+    // ==================================================
+
+    document
+        .getElementById(
+            "disconnectStravaButton"
+        )
+        .addEventListener(
+            "click",
+            async () => {
+
+                if (
+                    !confirm(
+                        "Strava echt ontkoppelen?"
+                    )
+                ) {
+
+                    return;
+
+                }
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "/api/strava/disconnect",
+                            {
+                                method: "POST"
+                            }
+                        );
+
+
+                    if (
+                        !response.ok
+                    ) {
+
+                        throw new Error(
+                            "Ontkoppelen mislukt."
+                        );
+
+                    }
+
+
+                    stravaActivities = [];
+
+
+                    rideAssignments = {};
+
+
+                    saveAssignments();
+
+
+                    renderAll();
+
+
+                    await checkStravaStatus();
+
+
+                } catch (error) {
+
+                    alert(
+                        "Strava kon niet worden ontkoppeld."
+                    );
+
+                }
+
+            }
+        );
+
+
+
+    // ==================================================
+    // STRAVA RITTEN OPHALEN
+    // ==================================================
+
+    document
+        .getElementById(
+            "refreshRidesButton"
+        )
+        .addEventListener(
+            "click",
+            async () => {
+
+                await loadRides();
+
+            }
+        );
+
+
+
+    async function loadRides() {
+
+        const container =
+            document.getElementById(
+                "ridesList"
+            );
+
+
+        if (
+            container
+        ) {
+
+            container.innerHTML = `
+                <div class="card">
+                    🔄 Ritten worden opgehaald...
+                </div>
+            `;
+
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/strava/activities"
+                );
+
+
+            if (
+                response.status === 401
+            ) {
+
+                stravaActivities = [];
+
+
+                if (
+                    container
+                ) {
+
+                    container.innerHTML = `
+                        <div class="message error">
+                            Strava is niet verbonden.
+                        </div>
+                    `;
+
+                }
+
+
+                return;
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            if (
+                !response.ok
+            ) {
+
+                throw new Error(
+                    data.error ||
+                    "Ritten konden niet worden opgehaald."
+                );
+
+            }
+
+
+            stravaActivities =
+                Array.isArray(
+                    data.activities
+                )
+                    ? data.activities
+                    : [];
+
+
+            renderRides();
+
+            renderDashboardRides();
+
+
+        } catch (error) {
+
+            console.error(
+                "Ritten ophalen fout:",
+                error
+            );
+
+
+            if (
+                container
+            ) {
+
+                container.innerHTML = `
+                    <div class="message error">
+                        Ritten konden niet worden opgehaald.
+                    </div>
+                `;
+
+            }
+
+        }
+
+    }
+
+
+
+    // ==================================================
+    // RITTEN WEERGEVEN
+    // ==================================================
+
+    function renderRides() {
+
+        const container =
+            document.getElementById(
+                "ridesList"
+            );
+
+
+        if (!container) {
+            return;
+        }
+
+
+        container.innerHTML = "";
+
+
+        if (
+            stravaActivities.length === 0
+        ) {
+
+            container.innerHTML = `
+                <div class="empty">
+                    Nog geen ritten gevonden.
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        stravaActivities.forEach(
+            activity => {
+
+                const card =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                const activityKey =
+                    String(
+                        activity.id
+                    );
+
+
+                const bikeId =
+                    rideAssignments[
+                        activityKey
+                    ];
+
+
+                const bike =
+                    bikes.find(
+                        item =>
+                            item.id ===
+                            bikeId
+                    );
+
+
+                card.className =
+                    "ride-card" +
+                    (
+                        bike
+                            ? " linked"
+                            : ""
+                    );
+
+
+                card.innerHTML = `
+
+                    <div class="ride-title">
+
+                        ${escapeHtml(
+                            activity.name ||
+                            "Fietstocht"
+                        )}
+
+                    </div>
+
+
+                    <div class="ride-distance">
+
+                        ${formatDistance(
+                            activity.distance
+                        )}
+
+                    </div>
+
+
+                    <div class="ride-meta">
+
+                        ${formatDate(
+                            activity.start_date_local ||
+                            activity.start_date
+                        )}
+
+                        <br>
+
+                        ${
+                            bike
+                                ? `🚲 Fiets:
+                                    ${escapeHtml(
+                                        bike.name
+                                    )}`
+                                : "⚪ Nog geen fiets toegewezen"
+                        }
+
+                    </div>
+
+                `;
+
+
+                card.addEventListener(
+                    "click",
+                    () => {
+
+                        openRideDetails(
+                            activity.id
+                        );
+
+                    }
+                );
+
+
+                container.appendChild(
+                    card
+                );
+
+            }
+        );
+
+    }
+
+
+
+    // ==================================================
+    // RIT DETAILS
+    // ==================================================
+
+    function openRideDetails(
+        activityId
+    ) {
+
+        const activity =
+            stravaActivities.find(
+                item =>
+                    String(
+                        item.id
+                    ) ===
+                    String(
+                        activityId
+                    )
+            );
+
+
+        if (!activity) {
+            return;
+        }
+
+
+        const details =
+            document.getElementById(
+                "rideDetails"
+            );
+
+
+        const currentBikeId =
+            rideAssignments[
+                String(activity.id)
+            ] || "";
+
+
+        details.classList.remove(
+            "hidden"
+        );
+
+
+        details.innerHTML = `
+
+            <h3>
+                ${escapeHtml(
+                    activity.name ||
+                    "Fietstocht"
+                )}
+            </h3>
+
+
+            <p>
+
+                <strong>
+                    Afstand:
+                </strong>
+
+                ${formatDistance(
+                    activity.distance
+                )}
+
+            </p>
+
+
+            <p>
+
+                <strong>
+                    Datum:
+                </strong>
+
+                ${formatDate(
+                    activity.start_date_local ||
+                    activity.start_date
+                )}
+
+            </p>
+
+
+            <label>
+
+                Fiets
+
+                <select
+                    id="rideBikeSelect"
+                >
+
+                    <option value="">
+                        Geen fiets
+                    </option>
+
+                    ${bikes
+                        .map(
+                            bike =>
+                                `
+                                <option
+                                    value="${bike.id}"
+                                    ${
+                                        bike.id ===
+                                        currentBikeId
+                                            ? "selected"
+                                            : ""
+                                    }
+                                >
+                                    ${escapeHtml(
+                                        bike.name
+                                    )}
+                                </option>
+                                `
+                        )
+                        .join("")
+                    }
+
+                </select>
+
+            </label>
+
+
+            <div class="actions">
+
+                ${
+                    bikes.length > 0
+                        ? `
+                            <button
+                                id="saveRideAssignmentButton"
+                                class="success"
+                                type="button"
+                            >
+                                💾 Fiets opslaan
+                            </button>
+                        `
+                        : ""
+                }
+
+
+                ${
+                    currentBikeId
+                        ? `
+                            <button
+                                id="removeRideAssignmentButton"
+                                class="danger"
+                                type="button"
+                            >
+                                Ontkoppelen
+                            </button>
+                        `
+                        : ""
+                }
+
+
+                <button
+                    id="closeRideButton"
+                    class="secondary"
+                    type="button"
+                >
+                    Sluiten
+                </button>
+
+            </div>
+
+        `;
+
+
+        const saveButton =
+            document.getElementById(
+                "saveRideAssignmentButton"
+            );
+
+
+        if (saveButton) {
+
+            saveButton.addEventListener(
+                "click",
+                () =>
+                    assignRide(
+                        activity.id
+                    )
+            );
+
+        }
+
+
+        const removeButton =
+            document.getElementById(
+                "removeRideAssignmentButton"
+            );
+
+
+        if (removeButton) {
+
+            removeButton.addEventListener(
+                "click",
+                () =>
+                    removeRideAssignment(
+                        activity.id
+                    )
+            );
+
+        }
+
+
+        document
+            .getElementById(
+                "closeRideButton"
+            )
+            .addEventListener(
+                "click",
+                closeRide
+            );
+
+
+        details.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    }
+
+
+
+    // ==================================================
+    // RIT AAN FIETS KOPPELEN
+    // ==================================================
+
+    function assignRide(
+        activityId
+    ) {
+
+        const select =
+            document.getElementById(
+                "rideBikeSelect"
+            );
+
+
+        if (!select) {
+            return;
+        }
+
+
+        const newBikeId =
+            select.value;
+
+
+        const activity =
+            stravaActivities.find(
+                item =>
+                    String(
+                        item.id
+                    ) ===
+                    String(
+                        activityId
+                    )
+            );
+
+
+        if (!activity) {
+            return;
+        }
+
+
+        const activityKey =
+            String(
+                activityId
+            );
+
+
+        const oldBikeId =
+            rideAssignments[
+                activityKey
+            ];
+
+
+        const distanceKm =
+            Number(
+                activity.distance || 0
+            ) / 1000;
+
+
+        if (
+            oldBikeId &&
+            oldBikeId !== newBikeId
+        ) {
+
+            const oldBike =
+                bikes.find(
+                    bike =>
+                        bike.id ===
+                        oldBikeId
+                );
+
+
+            if (oldBike) {
+
+                oldBike.km =
+                    Math.max(
+                        0,
+                        Number(
+                            oldBike.km || 0
+                        ) -
+                        distanceKm
+                    );
+
+            }
+
+        }
+
+
+        if (!newBikeId) {
+
+            delete rideAssignments[
+                activityKey
+            ];
+
+
+            saveAssignments();
+            saveBikes();
+
+
+            closeRide();
+
+
+            renderAll();
+            renderRides();
+
+
+            return;
+
+        }
+
+
+        const newBike =
+            bikes.find(
+                bike =>
+                    bike.id ===
+                    newBikeId
+            );
+
+
+        if (!newBike) {
+
+            alert(
+                "Deze fiets bestaat niet meer."
+            );
+
+            return;
+
+        }
+
+
+        if (
+            oldBikeId !== newBikeId
+        ) {
+
+            newBike.km =
+                Number(
+                    newBike.km || 0
+                ) +
+                distanceKm;
+
+        }
+
+
+        rideAssignments[
+            activityKey
+        ] =
+            newBikeId;
+
+
+        saveAssignments();
+        saveBikes();
+
+
+        closeRide();
+
+
+        renderAll();
+        renderRides();
+
+    }
+
+
+
+    // ==================================================
+    // RIT ONTKOPPELEN
+    // ==================================================
+
+    function removeRideAssignment(
+        activityId
+    ) {
+
+        const activityKey =
+            String(
+                activityId
+            );
+
+
+        const bikeId =
+            rideAssignments[
+                activityKey
+            ];
+
+
+        if (!bikeId) {
+            return;
+        }
+
+
+        const activity =
+            stravaActivities.find(
+                item =>
+                    String(
+                        item.id
+                    ) ===
+                    activityKey
+            );
+
+
+        const bike =
+            bikes.find(
+                item =>
+                    item.id ===
+                    bikeId
+            );
+
+
+        if (
+            activity &&
+            bike
+        ) {
+
+            const distanceKm =
+                Number(
+                    activity.distance || 0
+                ) / 1000;
+
+
+            bike.km =
+                Math.max(
+                    0,
+                    Number(
+                        bike.km || 0
+                    ) -
+                    distanceKm
+                );
+
+        }
+
+
+        delete rideAssignments[
+            activityKey
+        ];
+
+
+        saveAssignments();
+        saveBikes();
+
+
+        closeRide();
+
+
+        renderAll();
+        renderRides();
+
+    }
+
+
+
+    // ==================================================
+    // RIT DETAIL SLUITEN
+    // ==================================================
+
+    function closeRide() {
+
+        const details =
+            document.getElementById(
+                "rideDetails"
+            );
+
+
+        details.classList.add(
+            "hidden"
+        );
+
+
+        details.innerHTML = "";
+
+    }
+
+
+
+    // ==================================================
+    // FIETS SELECTS BIJWERKEN
+    // ==================================================
+
+    function renderBikeSelects() {
+
+        const selects = [
+
+            document.getElementById(
+                "partBike"
+            ),
+
+            document.getElementById(
+                "maintenanceBike"
+            )
+
+        ];
+
+
+        selects.forEach(
+            select => {
+
+                if (!select) {
+                    return;
+                }
+
+
+                const oldValue =
+                    select.value;
+
+
+                select.innerHTML = "";
+
+
+                if (
+                    bikes.length === 0
+                ) {
+
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
+
+
+                    option.value = "";
+
+
+                    option.textContent =
+                        "Voeg eerst een fiets toe";
+
+
+                    select.appendChild(
+                        option
+                    );
+
+
+                    return;
+
+                }
+
+
+                bikes.forEach(
+                    bike => {
+
+                        const option =
+                            document.createElement(
+                                "option"
+                            );
+
+
+                        option.value =
+                            bike.id;
+
+
+                        option.textContent =
+                            `${bike.name} (${formatNumber(
+                                bike.km
+                            )} km)`;
+
+
+                        select.appendChild(
+                            option
+                        );
+
+                    }
+                );
+
+
+                if (
+                    bikes.some(
+                        bike =>
+                            bike.id ===
+                            oldValue
+                    )
+                ) {
+
+                    select.value =
+                        oldValue;
+
+                }
+
+            }
+        );
+
+    }
+
+
+
+    // ==================================================
+    // ALLES RENDEREN
+    // ==================================================
+
+    function renderAll() {
+
+        renderBikes();
+
+        renderParts();
+
+        renderMaintenance();
+
+        renderDashboard();
+
+        renderBikeSelects();
+
+        renderRides();
+
+    }
+
+
+
+    // ==================================================
+    // START
+    // ==================================================
+
+    renderAll();
+
+
+    /*
+     * Bij het openen van de website wordt gecontroleerd
+     * of Strava verbonden is.
+     *
+     * Als Strava verbonden is, worden de ritten automatisch
+     * opgehaald.
+     */
+
+    checkStravaStatus();
+
+
+    /*
+     * Om de 5 minuten controleren op nieuwe ritten.
+     */
+
+    setInterval(
+        () => {
+
+            checkStravaStatus();
+
+        },
+        5 * 60 * 1000
+    );
+
 
 </script>
 

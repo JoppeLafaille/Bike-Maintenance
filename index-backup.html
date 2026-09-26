@@ -1,0 +1,3453 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bike Maintenance</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #222;
+        }
+
+        header {
+            background: #111827;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0 0 8px;
+        }
+
+        header p {
+            margin: 0;
+            color: #cbd5e1;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px 50px;
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        button {
+            border: none;
+            border-radius: 8px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .primary:hover {
+            background: #1d4ed8;
+        }
+
+        .secondary {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        .danger {
+            background: #dc2626;
+            color: white;
+        }
+
+        .warning {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .success {
+            background: #16a34a;
+            color: white;
+        }
+
+        .card {
+            background: white;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat {
+            background: white;
+            padding: 20px;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+
+        .stat-title {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .bike-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .bike-button {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        .bike-button.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .part {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 12px;
+        }
+
+        .part-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .part-name {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .part-info {
+            color: #64748b;
+            margin-top: 8px;
+            line-height: 1.6;
+        }
+
+        .part-actions {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        /* =========================
+           LEVENSDUURSBALK
+           ========================= */
+
+        .lifespan-container {
+            margin-top: 15px;
+        }
+
+        .lifespan-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 7px;
+            font-size: 14px;
+        }
+
+        .lifespan-label {
+            font-weight: bold;
+        }
+
+        .lifespan-percent {
+            font-weight: bold;
+        }
+
+        .progress-background {
+            width: 100%;
+            height: 15px;
+            background: #e5e7eb;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            border-radius: 999px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-green {
+            background: #16a34a;
+        }
+
+        .progress-orange {
+            background: #f59e0b;
+        }
+
+        .progress-red {
+            background: #dc2626;
+        }
+
+        .progress-text {
+            margin-top: 7px;
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .status-good {
+            color: #16a34a;
+            font-weight: bold;
+        }
+
+        .status-warning {
+            color: #f59e0b;
+            font-weight: bold;
+        }
+
+        .status-danger {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        /* =========================
+           ONDERHOUD
+           ========================= */
+
+        .maintenance-item {
+            border-left: 5px solid #2563eb;
+            background: #f8fafc;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+        }
+
+        .maintenance-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .maintenance-title {
+            font-weight: bold;
+            font-size: 17px;
+        }
+
+        .maintenance-info {
+            color: #64748b;
+            margin-top: 7px;
+        }
+
+        .history-item {
+            border: 1px solid #e2e8f0;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .empty {
+            color: #64748b;
+            padding: 10px 0;
+        }
+
+        .upcoming {
+            border-left: 5px solid #f59e0b;
+            padding: 12px;
+            background: #fffbeb;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .overview-part {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 10px;
+        }
+
+        .overview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .overview-name {
+            font-weight: bold;
+        }
+
+        .overview-bike {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .bike-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 800px) {
+
+            .dashboard {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full {
+                grid-column: auto;
+            }
+        }
+
+        @media (max-width: 500px) {
+
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <h1>🚴 Bike Maintenance</h1>
+
+    <p>
+        Beheer je fietsen, onderdelen en onderhoud
+    </p>
+
+</header>
+
+
+<main>
+
+    <!-- DASHBOARD -->
+
+    <section class="dashboard">
+
+        <div class="stat">
+
+            <div class="stat-title">
+                Fietsen
+            </div>
+
+            <div
+                class="stat-value"
+                id="dashboardBikes">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-title">
+                Totale kilometers
+            </div>
+
+            <div
+                class="stat-value"
+                id="dashboardKm">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-title">
+                Onderdelen
+            </div>
+
+            <div
+                class="stat-value"
+                id="dashboardParts">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-title">
+                Totale kosten
+            </div>
+
+            <div
+                class="stat-value"
+                id="dashboardCosts">
+                €0
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FIETSEN -->
+
+    <section class="card">
+
+        <h2>Mijn fietsen</h2>
+
+        <div
+            id="bikeList"
+            class="bike-list">
+        </div>
+
+
+        <button
+            class="primary"
+            onclick="showBikeForm()">
+
+            + Fiets toevoegen
+
+        </button>
+
+
+        <div
+            id="bikeForm"
+            class="hidden"
+            style="margin-top:20px;">
+
+            <div class="form-grid">
+
+                <div>
+
+                    <label>
+                        Naam van de fiets
+                    </label>
+
+                    <input
+                        id="bikeName"
+                        placeholder="Bijv. Racefiets">
+
+                </div>
+
+
+                <div>
+
+                    <label>
+                        Huidige kilometerstand
+                    </label>
+
+                    <input
+                        id="bikeKm"
+                        type="number"
+                        min="0"
+                        placeholder="0">
+
+                </div>
+
+            </div>
+
+
+            <div class="form-buttons">
+
+                <button
+                    class="primary"
+                    onclick="addBike()">
+
+                    Opslaan
+
+                </button>
+
+
+                <button
+                    class="secondary"
+                    onclick="hideBikeForm()">
+
+                    Annuleren
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ACTIEVE FIETS -->
+
+    <section class="card">
+
+        <h2 id="activeBikeTitle">
+            Mijn fiets
+        </h2>
+
+
+        <div class="form-grid">
+
+            <div>
+
+                <label>
+                    Naam
+                </label>
+
+                <input
+                    id="editBikeName">
+
+            </div>
+
+
+            <div>
+
+                <label>
+                    Huidige kilometerstand
+                </label>
+
+                <input
+                    id="editBikeKm"
+                    type="number"
+                    min="0">
+
+            </div>
+
+        </div>
+
+
+        <div class="bike-actions">
+
+            <button
+                class="primary"
+                onclick="saveBikeChanges()">
+
+                Wijzigingen opslaan
+
+            </button>
+
+
+            <button
+                class="danger"
+                onclick="deleteActiveBike()">
+
+                Fiets verwijderen
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ONDERDELEN -->
+
+    <section class="card">
+
+        <h2>Onderdelen</h2>
+
+        <div id="partsList"></div>
+
+
+        <button
+            class="primary"
+            onclick="showPartForm()">
+
+            + Onderdeel toevoegen
+
+        </button>
+
+
+        <div
+            id="partForm"
+            class="hidden"
+            style="margin-top:20px;">
+
+            <div class="form-grid">
+
+                <div>
+
+                    <label>
+                        Onderdeel
+                    </label>
+
+                    <select
+                        id="partType"
+                        onchange="toggleCustomPart()">
+
+                        <option value="Ketting">
+                            Ketting
+                        </option>
+
+                        <option value="Banden">
+                            Banden
+                        </option>
+
+                        <option value="Remblokken">
+                            Remblokken
+                        </option>
+
+                        <option value="Cassette">
+                            Cassette
+                        </option>
+
+                        <option value="Remschijven">
+                            Remschijven
+                        </option>
+
+                        <option value="Kabels">
+                            Kabels
+                        </option>
+
+                        <option value="Trapas">
+                            Trapas
+                        </option>
+
+                        <option value="Lagers">
+                            Lagers
+                        </option>
+
+                        <option value="Andere">
+                            Andere
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div
+                    id="customPartContainer"
+                    class="hidden">
+
+                    <label>
+                        Naam van onderdeel
+                    </label>
+
+                    <input
+                        id="customPartName"
+                        placeholder="Bijv. derailleur">
+
+                </div>
+
+
+                <div>
+
+                    <label>
+                        Prijs (€)
+                    </label>
+
+                    <input
+                        id="partPrice"
+                        type="number"
+                        min="0"
+                        step="0.01">
+
+                </div>
+
+
+                <div>
+
+                    <label>
+                        Montage kilometerstand
+                    </label>
+
+                    <input
+                        id="partInstallKm"
+                        type="number"
+                        min="0">
+
+                </div>
+
+
+                <div>
+
+                    <label>
+                        Onderhoudsinterval (km)
+                    </label>
+
+                    <input
+                        id="partInterval"
+                        type="number"
+                        min="0"
+                        placeholder="Bijv. 3000">
+
+                </div>
+
+            </div>
+
+
+            <div class="form-buttons">
+
+                <button
+                    class="primary"
+                    onclick="savePart()">
+
+                    Opslaan
+
+                </button>
+
+
+                <button
+                    class="secondary"
+                    onclick="hidePartForm()">
+
+                    Annuleren
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ONDERHOUD -->
+
+    <section class="card">
+
+        <h2>Onderhoud</h2>
+
+        <div id="maintenanceList"></div>
+
+
+        <button
+            class="primary"
+            onclick="showMaintenanceForm()">
+
+            + Onderhoud toevoegen
+
+        </button>
+
+
+        <div
+            id="maintenanceForm"
+            class="hidden"
+            style="margin-top:20px;">
+
+            <input
+                type="hidden"
+                id="editingMaintenanceId">
+
+
+            <div class="form-grid">
+
+                <div>
+
+                    <label>
+                        Type onderhoud
+                    </label>
+
+                    <input
+                        id="maintenanceType"
+                        placeholder="Bijv. Fiets volledig nagekeken">
+
+                </div>
+
+
+                <div>
+
+                    <label>
+                        Datum
+                    </label>
+
+                    <input
+                        id="maintenanceDate"
+                        type="date">
+
+                </div>
+
+
+                <div>
+
+                    <label>
+                        Kilometerstand
+                    </label>
+
+                    <input
+                        id="maintenanceKm"
+                        type="number"
+                        min="0">
+
+                </div>
+
+
+                <div>
+
+                    <label>
+                        Kosten (€)
+                    </label>
+
+                    <input
+                        id="maintenanceCost"
+                        type="number"
+                        min="0"
+                        step="0.01">
+
+                </div>
+
+
+                <div class="full">
+
+                    <label>
+                        Notities
+                    </label>
+
+                    <textarea
+                        id="maintenanceNotes"
+                        placeholder="Wat heb je gedaan?">
+                    </textarea>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-buttons">
+
+                <button
+                    class="primary"
+                    onclick="saveMaintenance()">
+
+                    Opslaan
+
+                </button>
+
+
+                <button
+                    class="secondary"
+                    onclick="hideMaintenanceForm()">
+
+                    Annuleren
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- NIEUWE STAP: ONDERHOUDSOVERZICHT -->
+
+    <section class="card">
+
+        <h2>
+            📊 Onderhoudsoverzicht
+        </h2>
+
+        <div id="maintenanceOverview"></div>
+
+    </section>
+
+
+    <!-- BINNENKORT ONDERHOUD -->
+
+    <section class="card">
+
+        <h2>
+            🔧 Binnenkort onderhoud
+        </h2>
+
+        <div id="upcomingMaintenance"></div>
+
+    </section>
+
+
+    <!-- VERVANGINGSGESCHIEDENIS -->
+
+    <section class="card">
+
+        <h2>
+            Vervangingsgeschiedenis
+        </h2>
+
+        <div id="replacementHistory"></div>
+
+    </section>
+
+</main>
+
+
+<script>
+
+    const STORAGE_KEY =
+        "bikeMaintenanceBikes";
+
+
+    let bikes = [];
+
+    let activeBikeId = null;
+
+    let editingPartId = null;
+
+
+    /* =========================
+       DATA LADEN
+       ========================= */
+
+    function loadData() {
+
+        const saved =
+            localStorage.getItem(
+                STORAGE_KEY
+            );
+
+
+        if (saved) {
+
+            try {
+
+                bikes =
+                    JSON.parse(saved);
+
+            } catch {
+
+                bikes = [];
+
+            }
+
+        }
+
+
+        if (
+            !Array.isArray(bikes) ||
+            bikes.length === 0
+        ) {
+
+            const oldBikeData =
+                JSON.parse(
+                    localStorage.getItem(
+                        "bikeData"
+                    ) || "null"
+                );
+
+
+            const oldParts =
+                JSON.parse(
+                    localStorage.getItem(
+                        "bikeParts"
+                    ) || "[]"
+                );
+
+
+            const oldMaintenance =
+                JSON.parse(
+                    localStorage.getItem(
+                        "bikeMaintenance"
+                    ) || "[]"
+                );
+
+
+            bikes = [{
+
+                id: Date.now(),
+
+                name:
+                    oldBikeData?.name ||
+                    "Mijn fiets",
+
+                km:
+                    oldBikeData?.km ||
+                    0,
+
+                parts:
+                    Array.isArray(oldParts)
+                        ? oldParts
+                        : [],
+
+                maintenance:
+                    Array.isArray(
+                        oldMaintenance
+                    )
+                        ? oldMaintenance
+                        : []
+
+            }];
+
+
+            bikes.forEach(
+                bike => {
+
+                    bike.parts.forEach(
+                        part => {
+
+                            if (
+                                !Array.isArray(
+                                    part.replacementHistory
+                                )
+                            ) {
+
+                                part.replacementHistory =
+                                    [];
+
+                            }
+
+                        }
+                    );
+
+                }
+            );
+
+
+            saveData();
+
+        }
+
+
+        activeBikeId =
+            bikes[0]?.id ||
+            null;
+
+
+        renderAll();
+
+    }
+
+
+    function saveData() {
+
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(bikes)
+        );
+
+    }
+
+
+    function getActiveBike() {
+
+        return bikes.find(
+            bike =>
+                bike.id ===
+                activeBikeId
+        );
+
+    }
+
+
+    function renderAll() {
+
+        renderBikes();
+
+        renderActiveBike();
+
+        renderParts();
+
+        renderMaintenance();
+
+        renderMaintenanceOverview();
+
+        renderUpcomingMaintenance();
+
+        renderReplacementHistory();
+
+        renderDashboard();
+
+    }
+
+
+    /* =========================
+       DASHBOARD
+       ========================= */
+
+    function renderDashboard() {
+
+        let totalKm = 0;
+
+        let totalParts = 0;
+
+        let totalCosts = 0;
+
+
+        bikes.forEach(
+            bike => {
+
+                totalKm +=
+                    Number(bike.km) ||
+                    0;
+
+
+                bike.parts.forEach(
+                    part => {
+
+                        totalParts++;
+
+
+                        totalCosts +=
+                            calculatePartTotalCost(
+                                part
+                            );
+
+                    }
+                );
+
+
+                bike.maintenance.forEach(
+                    item => {
+
+                        totalCosts +=
+                            Number(item.cost) ||
+                            0;
+
+                    }
+                );
+
+            }
+        );
+
+
+        document.getElementById(
+            "dashboardBikes"
+        ).textContent =
+            bikes.length;
+
+
+        document.getElementById(
+            "dashboardKm"
+        ).textContent =
+            totalKm.toLocaleString(
+                "nl-BE"
+            ) + " km";
+
+
+        document.getElementById(
+            "dashboardParts"
+        ).textContent =
+            totalParts;
+
+
+        document.getElementById(
+            "dashboardCosts"
+        ).textContent =
+            "€" +
+            totalCosts.toFixed(2);
+
+    }
+
+
+    /* =========================
+       FIETSEN
+       ========================= */
+
+    function renderBikes() {
+
+        const container =
+            document.getElementById(
+                "bikeList"
+            );
+
+
+        container.innerHTML = "";
+
+
+        bikes.forEach(
+            bike => {
+
+                const button =
+                    document.createElement(
+                        "button"
+                    );
+
+
+                button.className =
+                    "bike-button " +
+                    (
+                        bike.id ===
+                        activeBikeId
+                            ? "active"
+                            : ""
+                    );
+
+
+                button.textContent =
+                    `${bike.name} (${bike.km} km)`;
+
+
+                button.onclick =
+                    () => {
+
+                        activeBikeId =
+                            bike.id;
+
+                        renderAll();
+
+                    };
+
+
+                container.appendChild(
+                    button
+                );
+
+            }
+        );
+
+    }
+
+
+    function renderActiveBike() {
+
+        const bike =
+            getActiveBike();
+
+
+        if (!bike) return;
+
+
+        document.getElementById(
+            "activeBikeTitle"
+        ).textContent =
+            bike.name;
+
+
+        document.getElementById(
+            "editBikeName"
+        ).value =
+            bike.name;
+
+
+        document.getElementById(
+            "editBikeKm"
+        ).value =
+            bike.km;
+
+    }
+
+
+    function showBikeForm() {
+
+        document.getElementById(
+            "bikeForm"
+        ).classList.remove(
+            "hidden"
+        );
+
+    }
+
+
+    function hideBikeForm() {
+
+        document.getElementById(
+            "bikeForm"
+        ).classList.add(
+            "hidden"
+        );
+
+
+        document.getElementById(
+            "bikeName"
+        ).value = "";
+
+
+        document.getElementById(
+            "bikeKm"
+        ).value = "";
+
+    }
+
+
+    function addBike() {
+
+        const name =
+            document.getElementById(
+                "bikeName"
+            ).value.trim();
+
+
+        const km =
+            Number(
+                document.getElementById(
+                    "bikeKm"
+                ).value
+            ) || 0;
+
+
+        if (!name) {
+
+            alert(
+                "Geef je fiets een naam."
+            );
+
+            return;
+
+        }
+
+
+        const newBike = {
+
+            id: Date.now(),
+
+            name: name,
+
+            km: km,
+
+            parts: [],
+
+            maintenance: []
+
+        };
+
+
+        bikes.push(
+            newBike
+        );
+
+
+        activeBikeId =
+            newBike.id;
+
+
+        saveData();
+
+        hideBikeForm();
+
+        renderAll();
+
+    }
+
+
+    function saveBikeChanges() {
+
+        const bike =
+            getActiveBike();
+
+
+        if (!bike) return;
+
+
+        const name =
+            document.getElementById(
+                "editBikeName"
+            ).value.trim();
+
+
+        const km =
+            Number(
+                document.getElementById(
+                    "editBikeKm"
+                ).value
+            ) || 0;
+
+
+        if (!name) {
+
+            alert(
+                "Geef je fiets een naam."
+            );
+
+            return;
+
+        }
+
+
+        bike.name =
+            name;
+
+
+        bike.km =
+            km;
+
+
+        saveData();
+
+        renderAll();
+
+    }
+
+
+    function deleteActiveBike() {
+
+        if (
+            bikes.length <= 1
+        ) {
+
+            alert(
+                "Je moet minstens één fiets behouden."
+            );
+
+            return;
+
+        }
+
+
+        const bike =
+            getActiveBike();
+
+
+        if (!bike) return;
+
+
+        if (
+            !confirm(
+                `Wil je "${bike.name}" verwijderen?\n\nAlle onderdelen, onderhoud en vervangingsgeschiedenis van deze fiets worden verwijderd.`
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        bikes =
+            bikes.filter(
+                item =>
+                    item.id !==
+                    activeBikeId
+            );
+
+
+        activeBikeId =
+            bikes[0].id;
+
+
+        saveData();
+
+        renderAll();
+
+    }
+
+
+    /* =========================
+       ONDERDELEN FORMULIER
+       ========================= */
+
+    function showPartForm(
+        part = null
+    ) {
+
+        editingPartId =
+            part
+                ? part.id
+                : null;
+
+
+        document.getElementById(
+            "partForm"
+        ).classList.remove(
+            "hidden"
+        );
+
+
+        if (part) {
+
+            document.getElementById(
+                "partType"
+            ).value =
+                part.type ||
+                "Andere";
+
+
+            document.getElementById(
+                "partPrice"
+            ).value =
+                part.price ||
+                0;
+
+
+            document.getElementById(
+                "partInstallKm"
+            ).value =
+                part.installKm ||
+                0;
+
+
+            document.getElementById(
+                "partInterval"
+            ).value =
+                part.interval ||
+                "";
+
+
+            if (
+                part.type ===
+                "Andere"
+            ) {
+
+                document.getElementById(
+                    "customPartName"
+                ).value =
+                    part.name ||
+                    "";
+
+            }
+
+        } else {
+
+            document.getElementById(
+                "partType"
+            ).value =
+                "Ketting";
+
+
+            document.getElementById(
+                "partPrice"
+            ).value =
+                "";
+
+
+            document.getElementById(
+                "partInstallKm"
+            ).value =
+                getActiveBike()?.km ||
+                0;
+
+
+            document.getElementById(
+                "partInterval"
+            ).value =
+                "";
+
+
+            document.getElementById(
+                "customPartName"
+            ).value =
+                "";
+
+        }
+
+
+        toggleCustomPart();
+
+    }
+
+
+    function hidePartForm() {
+
+        document.getElementById(
+            "partForm"
+        ).classList.add(
+            "hidden"
+        );
+
+
+        editingPartId =
+            null;
+
+    }
+
+
+    function toggleCustomPart() {
+
+        const type =
+            document.getElementById(
+                "partType"
+            ).value;
+
+
+        const container =
+            document.getElementById(
+                "customPartContainer"
+            );
+
+
+        if (
+            type ===
+            "Andere"
+        ) {
+
+            container.classList.remove(
+                "hidden"
+            );
+
+        } else {
+
+            container.classList.add(
+                "hidden"
+            );
+
+        }
+
+    }
+
+
+    function savePart() {
+
+        const bike =
+            getActiveBike();
+
+
+        if (!bike) return;
+
+
+        const type =
+            document.getElementById(
+                "partType"
+            ).value;
+
+
+        const customName =
+            document.getElementById(
+                "customPartName"
+            ).value.trim();
+
+
+        const name =
+            type === "Andere"
+                ? customName
+                : type;
+
+
+        const price =
+            Number(
+                document.getElementById(
+                    "partPrice"
+                ).value
+            ) || 0;
+
+
+        const installKm =
+            Number(
+                document.getElementById(
+                    "partInstallKm"
+                ).value
+            ) || 0;
+
+
+        const interval =
+            Number(
+                document.getElementById(
+                    "partInterval"
+                ).value
+            ) || 0;
+
+
+        if (!name) {
+
+            alert(
+                "Geef een naam voor het onderdeel."
+            );
+
+            return;
+
+        }
+
+
+        if (editingPartId) {
+
+            const part =
+                bike.parts.find(
+                    p =>
+                        p.id ===
+                        editingPartId
+                );
+
+
+            if (part) {
+
+                part.type =
+                    type;
+
+                part.name =
+                    name;
+
+                part.price =
+                    price;
+
+                part.installKm =
+                    installKm;
+
+                part.interval =
+                    interval;
+
+            }
+
+        } else {
+
+            bike.parts.push({
+
+                id: Date.now(),
+
+                type: type,
+
+                name: name,
+
+                price: price,
+
+                installKm:
+                    installKm,
+
+                interval:
+                    interval,
+
+                replacementHistory:
+                    []
+
+            });
+
+        }
+
+
+        saveData();
+
+        hidePartForm();
+
+        renderAll();
+
+    }
+
+
+    /* =========================
+       ONDERDELEN WEERGEVEN
+       ========================= */
+
+    function renderParts() {
+
+        const bike =
+            getActiveBike();
+
+
+        const container =
+            document.getElementById(
+                "partsList"
+            );
+
+
+        container.innerHTML = "";
+
+
+        if (
+            !bike ||
+            bike.parts.length === 0
+        ) {
+
+            container.innerHTML =
+                `<div class="empty">
+                    Nog geen onderdelen toegevoegd.
+                </div>`;
+
+            return;
+
+        }
+
+
+        bike.parts.forEach(
+            part => {
+
+                const currentKm =
+                    Math.max(
+                        0,
+                        Number(bike.km) -
+                        Number(
+                            part.installKm ||
+                            0
+                        )
+                    );
+
+
+                const interval =
+                    Number(
+                        part.interval
+                    ) || 0;
+
+
+                let usedPercentage =
+                    0;
+
+
+                let remaining =
+                    0;
+
+
+                if (
+                    interval > 0
+                ) {
+
+                    usedPercentage =
+                        Math.min(
+                            100,
+                            Math.max(
+                                0,
+                                (
+                                    currentKm /
+                                    interval
+                                ) * 100
+                            )
+                        );
+
+
+                    remaining =
+                        Math.max(
+                            0,
+                            interval -
+                            currentKm
+                        );
+
+                }
+
+
+                let progressClass =
+                    "progress-green";
+
+
+                let statusClass =
+                    "status-good";
+
+
+                let statusText =
+                    "Normaal";
+
+
+                /*
+                 * 0-70% gebruikt = groen
+                 * 70-100% gebruikt = oranje
+                 * 100%+ gebruikt = rood
+                 */
+
+                if (
+                    interval <= 0
+                ) {
+
+                    usedPercentage =
+                        0;
+
+                    progressClass =
+                        "progress-green";
+
+                    statusClass =
+                        "status-good";
+
+                    statusText =
+                        "Geen interval ingesteld";
+
+                } else if (
+                    currentKm >=
+                    interval
+                ) {
+
+                    usedPercentage =
+                        100;
+
+                    progressClass =
+                        "progress-red";
+
+                    statusClass =
+                        "status-danger";
+
+                    statusText =
+                        "Onderhoud nodig";
+
+                } else if (
+                    usedPercentage >=
+                    70
+                ) {
+
+                    progressClass =
+                        "progress-orange";
+
+                    statusClass =
+                        "status-warning";
+
+                    statusText =
+                        "Bijna onderhoud nodig";
+
+                }
+
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                div.className =
+                    "part";
+
+
+                div.innerHTML = `
+
+                    <div class="part-header">
+
+                        <div class="part-name">
+                            ${escapeHtml(
+                                part.name
+                            )}
+                        </div>
+
+                        <div>
+                            €${Number(
+                                part.price ||
+                                0
+                            ).toFixed(2)}
+                        </div>
+
+                    </div>
+
+
+                    <div class="part-info">
+
+                        Gebruikt:
+                        ${currentKm.toLocaleString(
+                            "nl-BE"
+                        )} km
+
+                        <br>
+
+                        Gemonteerd bij:
+                        ${Number(
+                            part.installKm ||
+                            0
+                        ).toLocaleString(
+                            "nl-BE"
+                        )} km
+
+                        <br>
+
+                        Levensduur:
+                        ${
+                            interval > 0
+                                ? interval.toLocaleString(
+                                    "nl-BE"
+                                ) + " km"
+                                : "Geen interval"
+                        }
+
+                    </div>
+
+
+                    ${
+                        interval > 0
+                        ? `
+
+                        <div
+                            class="lifespan-container">
+
+                            <div
+                                class="lifespan-top">
+
+                                <span
+                                    class="lifespan-label">
+
+                                    Levensduur gebruikt
+
+                                </span>
+
+
+                                <span
+                                    class="lifespan-percent ${statusClass}">
+
+                                    ${Math.round(
+                                        usedPercentage
+                                    )}% gebruikt
+
+                                </span>
+
+                            </div>
+
+
+                            <div
+                                class="progress-background">
+
+                                <div
+                                    class="progress-bar ${progressClass}"
+                                    style="width:${usedPercentage}%">
+
+                                </div>
+
+                            </div>
+
+
+                            <div
+                                class="progress-text">
+
+                                ${
+                                    remaining > 0
+                                    ? `${remaining.toLocaleString(
+                                        "nl-BE"
+                                    )} km kan nog mee`
+                                    : "Het onderhoudsinterval is bereikt"
+                                }
+
+                                ·
+
+                                <span
+                                    class="${statusClass}">
+
+                                    ${statusText}
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        `
+                        : ""
+                    }
+
+
+                    <div
+                        class="part-actions">
+
+                        <button
+                            class="secondary"
+                            onclick="showPartFormById(${part.id})">
+
+                            Bewerken
+
+                        </button>
+
+
+                        <button
+                            class="warning"
+                            onclick="replacePart(${part.id})">
+
+                            Vervangen
+
+                        </button>
+
+
+                        <button
+                            class="danger"
+                            onclick="deletePart(${part.id})">
+
+                            Verwijderen
+
+                        </button>
+
+                    </div>
+
+                `;
+
+
+                container.appendChild(
+                    div
+                );
+
+            }
+        );
+
+    }
+
+
+    function showPartFormById(
+        id
+    ) {
+
+        const bike =
+            getActiveBike();
+
+
+        if (!bike) return;
+
+
+        const part =
+            bike.parts.find(
+                p =>
+                    p.id === id
+            );
+
+
+        if (part) {
+
+            showPartForm(
+                part
+            );
+
+        }
+
+    }
+
+
+    /* =========================
+       ONDERDEEL VERVANGEN
+       ========================= */
+
+    function replacePart(
+        id
+    ) {
+
+        const bike =
+            getActiveBike();
+
+
+        if (!bike) return;
+
+
+        const part =
+            bike.parts.find(
+                p =>
+                    p.id === id
+            );
+
+
+        if (!part) return;
+
+
+        const newPrice =
+            Number(
+                prompt(
+                    `Nieuwe prijs voor ${part.name}:`,
+                    part.price ||
+                    0
+                )
+            );
+
+
+        if (
+            isNaN(newPrice) ||
+            newPrice < 0
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            !Array.isArray(
+                part.replacementHistory
+            )
+        ) {
+
+            part.replacementHistory =
+                [];
+
+        }
+
+
+        part.replacementHistory.push({
+
+            id: Date.now(),
+
+            date:
+                new Date()
+                    .toISOString(),
+
+            oldPrice:
+                Number(
+                    part.price
+                ) || 0,
+
+            newPrice:
+                newPrice,
+
+            oldInstallKm:
+                Number(
+                    part.installKm
+                ) || 0,
+
+            newInstallKm:
+                Number(
+                    bike.km
+                ) || 0
+
+        });
+
+
+        part.price =
+            newPrice;
+
+
+        part.installKm =
+            Number(
+                bike.km
+            ) || 0;
+
+
+        saveData();
+
+        renderAll();
+
+    }
+
+
+    /* =========================
+       ONDERDEEL VERWIJDEREN
+       ========================= */
+
+    function deletePart(
+        id
+    ) {
+
+        const bike =
+            getActiveBike();
+
+
+        if (!bike) return;
+
+
+        const part =
+            bike.parts.find(
+                p =>
+                    p.id === id
+            );
+
+
+        if (!part) return;
+
+
+        if (
+            !confirm(
+                `Wil je "${part.name}" verwijderen?\n\nDe volledige vervangingsgeschiedenis van dit onderdeel wordt ook verwijderd.`
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        bike.parts =
+            bike.parts.filter(
+                p =>
+                    p.id !== id
+            );
+
+
+        saveData();
+
+        renderAll();
+
+    }
+
+
+    /* =========================
+       ONDERHOUD FORMULIER
+       ========================= */
+
+    function showMaintenanceForm(
+        item = null
+    ) {
+
+        const bike =
+            getActiveBike();
+
+
+        if (!bike) return;
+
+
+        document.getElementById(
+            "maintenanceForm"
+        ).classList.remove(
+            "hidden"
+        );
+
+
+        if (item) {
+
+            document.getElementById(
+                "editingMaintenanceId"
+            ).value =
+                item.id;
+
+
+            document.getElementById(
+                "maintenanceType"
+            ).value =
+                item.type ||
+                "";
+
+
+            document.getElementById(
+                "maintenanceDate"
+            ).value =
+                item.date ||
+                "";
+
+
+            document.getElementById(
+                "maintenanceKm"
+            ).value =
+                item.km ??
+                bike.km;
+
+
+            document.getElementById(
+                "maintenanceCost"
+            ).value =
+                item.cost ||
+                0;
+
+
+            document.getElementById(
+                "maintenanceNotes"
+            ).value =
+                item.notes ||
+                "";
+
+
+        } else {
+
+            document.getElementById(
+                "editingMaintenanceId"
+            ).value =
+                "";
+
+
+            document.getElementById(
+                "maintenanceType"
+            ).value =
+                "";
+
+
+            document.getElementById(
+                "maintenanceDate"
+            ).value =
+                new Date()
+                    .toISOString()
+                    .split("T")[0];
+
+
+            document.getElementById(
+                "maintenanceKm"
+            ).value =
+                bike.km;
+
+
+            document.getElementById(
+                "maintenanceCost"
+            ).value =
+                "";
+
+
+            document.getElementById(
+                "maintenanceNotes"
+            ).value =
+                "";
+
+        }
+
+    }
+
+
+    function hideMaintenanceForm() {
+
+        document.getElementById(
+            "maintenanceForm"
+        ).classList.add(
+            "hidden"
+        );
+
+
+        document.getElementById(
+            "editingMaintenanceId"
+        ).value =
+            "";
+
+    }
+
+
+    function saveMaintenance() {
+
+        const bike =
+            getActiveBike();
+
+
+        if (!bike) return;
+
+
+        const editingId =
+            Number(
+                document.getElementById(
+                    "editingMaintenanceId"
+                ).value
+            ) ||
+            null;
+
+
+        const type =
+            document.getElementById(
+                "maintenanceType"
+            ).value.trim();
+
+
+        const date =
+            document.getElementById(
+                "maintenanceDate"
+            ).value;
+
+
+        const km =
+            Number(
+                document.getElementById(
+                    "maintenanceKm"
+                ).value
+            ) ||
+            0;
+
+
+        const cost =
+            Number(
+                document.getElementById(
+                    "maintenanceCost"
+                ).value
+            ) ||
+            0;
+
+
+        const notes =
+            document.getElementById(
+                "maintenanceNotes"
+            ).value.trim();
+
+
+        if (!type) {
+
+            alert(
+                "Geef het onderhoud een naam."
+            );
+
+            return;
+
+        }
+
+
+        if (editingId) {
+
+            const item =
+                bike.maintenance.find(
+                    m =>
+                        m.id ===
+                        editingId
+                );
+
+
+            if (item) {
+
+                item.type =
+                    type;
+
+                item.date =
+                    date;
+
+                item.km =
+                    km;
+
+                item.cost =
+                    cost;
+
+                item.notes =
+                    notes;
+
+            }
+
+        } else {
+
+            bike.maintenance.push({
+
+                id: Date.now(),
+
+                type:
+                    type,
+
+                date:
+                    date,
+
+                km:
+                    km,
+
+                cost:
+                    cost,
+
+                notes:
+                    notes
+
+            });
+
+        }
+
+
+        saveData();
+
+        hideMaintenanceForm();
+
+        renderAll();
+
+    }
+
+
+    function renderMaintenance() {
+
+        const bike =
+            getActiveBike();
+
+
+        const container =
+            document.getElementById(
+                "maintenanceList"
+            );
+
+
+        container.innerHTML = "";
+
+
+        if (
+            !bike ||
+            bike.maintenance.length === 0
+        ) {
+
+            container.innerHTML =
+                `<div class="empty">
+                    Nog geen onderhoud geregistreerd.
+                </div>`;
+
+            return;
+
+        }
+
+
+        const sorted =
+            [...bike.maintenance].sort(
+                (a, b) =>
+                    new Date(b.date) -
+                    new Date(a.date)
+            );
+
+
+        sorted.forEach(
+            item => {
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                div.className =
+                    "maintenance-item";
+
+
+                div.innerHTML = `
+
+                    <div
+                        class="maintenance-header">
+
+                        <div
+                            class="maintenance-title">
+
+                            ${escapeHtml(
+                                item.type
+                            )}
+
+                        </div>
+
+
+                        <div>
+
+                            €${Number(
+                                item.cost ||
+                                0
+                            ).toFixed(2)}
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="maintenance-info">
+
+                        📅 ${formatDate(
+                            item.date
+                        )}
+
+                        <br>
+
+                        🚴 ${Number(
+                            item.km ||
+                            0
+                        ).toLocaleString(
+                            "nl-BE"
+                        )} km
+
+                        ${
+                            item.notes
+                                ? `<br>📝 ${escapeHtml(
+                                    item.notes
+                                )}`
+                                : ""
+                        }
+
+                    </div>
+
+
+                    <div
+                        class="part-actions">
+
+                        <button
+                            class="secondary"
+                            onclick="editMaintenance(${item.id})">
+
+                            Bewerken
+
+                        </button>
+
+
+                        <button
+                            class="danger"
+                            onclick="deleteMaintenance(${item.id})">
+
+                            Verwijderen
+
+                        </button>
+
+                    </div>
+
+                `;
+
+
+                container.appendChild(
+                    div
+                );
+
+            }
+        );
+
+    }
+
+
+    function editMaintenance(
+        id
+    ) {
+
+        const bike =
+            getActiveBike();
+
+
+        if (!bike) return;
+
+
+        const item =
+            bike.maintenance.find(
+                m =>
+                    m.id === id
+            );
+
+
+        if (item) {
+
+            showMaintenanceForm(
+                item
+            );
+
+        }
+
+    }
+
+
+    function deleteMaintenance(
+        id
+    ) {
+
+        const bike =
+            getActiveBike();
+
+
+        if (!bike) return;
+
+
+        const item =
+            bike.maintenance.find(
+                m =>
+                    m.id === id
+            );
+
+
+        if (!item) return;
+
+
+        if (
+            !confirm(
+                `Wil je "${item.type}" verwijderen?`
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        bike.maintenance =
+            bike.maintenance.filter(
+                m =>
+                    m.id !== id
+            );
+
+
+        saveData();
+
+        renderAll();
+
+    }
+
+
+    /* =========================
+       NIEUWE STAP:
+       ONDERHOUDSOVERZICHT
+       ========================= */
+
+    function renderMaintenanceOverview() {
+
+        const container =
+            document.getElementById(
+                "maintenanceOverview"
+            );
+
+
+        container.innerHTML = "";
+
+
+        const allParts = [];
+
+
+        bikes.forEach(
+            bike => {
+
+                bike.parts.forEach(
+                    part => {
+
+                        const interval =
+                            Number(
+                                part.interval
+                            ) || 0;
+
+
+                        if (
+                            interval <= 0
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        const used =
+                            Math.max(
+                                0,
+                                Number(
+                                    bike.km
+                                ) -
+                                Number(
+                                    part.installKm ||
+                                    0
+                                )
+                            );
+
+
+                        const remaining =
+                            Math.max(
+                                0,
+                                interval -
+                                used
+                            );
+
+
+                        const percentage =
+                            Math.min(
+                                100,
+                                (
+                                    used /
+                                    interval
+                                ) * 100
+                            );
+
+
+                        let status =
+                            "Normaal";
+
+
+                        if (
+                            used >=
+                            interval
+                        ) {
+
+                            status =
+                                "Onderhoud nodig";
+
+                        } else if (
+                            percentage >=
+                            70
+                        ) {
+
+                            status =
+                                "Bijna onderhoud nodig";
+
+                        }
+
+
+                        allParts.push({
+
+                            bike:
+                                bike.name,
+
+                            part:
+                                part.name,
+
+                            used:
+                                used,
+
+                            remaining:
+                                remaining,
+
+                            percentage:
+                                percentage,
+
+                            status:
+                                status
+
+                        });
+
+                    }
+                );
+
+            }
+        );
+
+
+        if (
+            allParts.length === 0
+        ) {
+
+            container.innerHTML =
+                `<div class="empty">
+                    Voeg onderhoudsintervallen toe aan je onderdelen om hier een overzicht te krijgen.
+                </div>`;
+
+            return;
+
+        }
+
+
+        allParts.sort(
+            (a, b) =>
+                b.percentage -
+                a.percentage
+        );
+
+
+        allParts.forEach(
+            item => {
+
+                let statusClass =
+                    "status-good";
+
+
+                if (
+                    item.status ===
+                    "Bijna onderhoud nodig"
+                ) {
+
+                    statusClass =
+                        "status-warning";
+
+                } else if (
+                    item.status ===
+                    "Onderhoud nodig"
+                ) {
+
+                    statusClass =
+                        "status-danger";
+
+                }
+
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                div.className =
+                    "overview-part";
+
+
+                div.innerHTML = `
+
+                    <div
+                        class="overview-header">
+
+                        <div>
+
+                            <div
+                                class="overview-name">
+
+                                ${escapeHtml(
+                                    item.part
+                                )}
+
+                            </div>
+
+
+                            <div
+                                class="overview-bike">
+
+                                ${escapeHtml(
+                                    item.bike
+                                )}
+
+                            </div>
+
+                        </div>
+
+
+                        <strong
+                            class="${statusClass}">
+
+                            ${Math.round(
+                                item.percentage
+                            )}% gebruikt
+
+                        </strong>
+
+                    </div>
+
+
+                    <div
+                        class="progress-background"
+                        style="margin-top:10px;">
+
+                        <div
+                            class="progress-bar ${
+                                item.status ===
+                                "Onderhoud nodig"
+                                    ? "progress-red"
+                                    : item.status ===
+                                      "Bijna onderhoud nodig"
+                                        ? "progress-orange"
+                                        : "progress-green"
+                            }"
+                            style="width:${item.percentage}%">
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="progress-text">
+
+                        ${
+                            item.remaining > 0
+                                ? `${item.remaining.toLocaleString(
+                                    "nl-BE"
+                                )} km resterend`
+                                : "Interval bereikt"
+                        }
+
+                        ·
+
+                        <span
+                            class="${statusClass}">
+
+                            ${item.status}
+
+                        </span>
+
+                    </div>
+
+                `;
+
+
+                container.appendChild(
+                    div
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =========================
+       BINNENKORT ONDERHOUD
+       ========================= */
+
+    function renderUpcomingMaintenance() {
+
+        const container =
+            document.getElementById(
+                "upcomingMaintenance"
+            );
+
+
+        container.innerHTML = "";
+
+
+        const upcoming = [];
+
+
+        bikes.forEach(
+            bike => {
+
+                bike.parts.forEach(
+                    part => {
+
+                        const interval =
+                            Number(
+                                part.interval
+                            ) || 0;
+
+
+                        if (
+                            interval <= 0
+                        ) return;
+
+
+                        const used =
+                            Math.max(
+                                0,
+                                Number(
+                                    bike.km
+                                ) -
+                                Number(
+                                    part.installKm ||
+                                    0
+                                )
+                            );
+
+
+                        const remaining =
+                            interval -
+                            used;
+
+
+                        if (
+                            remaining <=
+                            500
+                        ) {
+
+                            upcoming.push({
+
+                                bike:
+                                    bike.name,
+
+                                part:
+                                    part.name,
+
+                                remaining:
+                                    remaining
+
+                            });
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+
+        if (
+            upcoming.length === 0
+        ) {
+
+            container.innerHTML =
+                `<div class="empty">
+                    🎉 Geen onderhoud dat binnenkort nodig is.
+                </div>`;
+
+            return;
+
+        }
+
+
+        upcoming.sort(
+            (a, b) =>
+                a.remaining -
+                b.remaining
+        );
+
+
+        upcoming.forEach(
+            item => {
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                div.className =
+                    "upcoming";
+
+
+                let text;
+
+
+                if (
+                    item.remaining <=
+                    0
+                ) {
+
+                    text =
+                        `<strong>${escapeHtml(
+                            item.part
+                        )}</strong>
+                        op
+                        <strong>${escapeHtml(
+                            item.bike
+                        )}</strong>
+                        heeft onderhoud nodig.`;
+
+                } else {
+
+                    text =
+                        `<strong>${escapeHtml(
+                            item.part
+                        )}</strong>
+                        op
+                        <strong>${escapeHtml(
+                            item.bike
+                        )}</strong>
+                        heeft binnen
+                        <strong>${item.remaining.toLocaleString(
+                            "nl-BE"
+                        )} km</strong>
+                        onderhoud nodig.`;
+
+                }
+
+
+                div.innerHTML =
+                    text;
+
+
+                container.appendChild(
+                    div
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =========================
+       VERVANGINGSGESCHIEDENIS
+       ========================= */
+
+    function renderReplacementHistory() {
+
+        const container =
+            document.getElementById(
+                "replacementHistory"
+            );
+
+
+        container.innerHTML = "";
+
+
+        const history = [];
+
+
+        bikes.forEach(
+            bike => {
+
+                bike.parts.forEach(
+                    part => {
+
+                        if (
+                            !Array.isArray(
+                                part.replacementHistory
+                            )
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        part.replacementHistory.forEach(
+                            item => {
+
+                                history.push({
+
+                                    bikeName:
+                                        bike.name,
+
+                                    partName:
+                                        part.name,
+
+                                    date:
+                                        item.date,
+
+                                    oldPrice:
+                                        item.oldPrice,
+
+                                    newPrice:
+                                        item.newPrice,
+
+                                    oldInstallKm:
+                                        item.oldInstallKm,
+
+                                    newInstallKm:
+                                        item.newInstallKm
+
+                                });
+
+                            }
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+        if (
+            history.length === 0
+        ) {
+
+            container.innerHTML =
+                `<div class="empty">
+                    Nog geen vervangingen geregistreerd.
+                </div>`;
+
+            return;
+
+        }
+
+
+        history.sort(
+            (a, b) =>
+                new Date(b.date) -
+                new Date(a.date)
+        );
+
+
+        history.forEach(
+            item => {
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                div.className =
+                    "history-item";
+
+
+                div.innerHTML = `
+
+                    <strong>
+                        ${escapeHtml(
+                            item.partName
+                        )}
+                    </strong>
+
+                    <br>
+
+                    🚴 ${escapeHtml(
+                        item.bikeName
+                    )}
+
+                    <br>
+
+                    📅 ${formatDate(
+                        item.date
+                    )}
+
+                    <br>
+
+                    Kilometerstand:
+                    ${Number(
+                        item.newInstallKm ||
+                        0
+                    ).toLocaleString(
+                        "nl-BE"
+                    )} km
+
+                    <br>
+
+                    Prijs:
+                    €${Number(
+                        item.newPrice ||
+                        0
+                    ).toFixed(2)}
+
+                `;
+
+
+                container.appendChild(
+                    div
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =========================
+       KOSTEN
+       ========================= */
+
+    function calculatePartTotalCost(
+        part
+    ) {
+
+        let total =
+            Number(
+                part.price
+            ) || 0;
+
+
+        if (
+            Array.isArray(
+                part.replacementHistory
+            )
+        ) {
+
+            part.replacementHistory.forEach(
+                replacement => {
+
+                    total +=
+                        Number(
+                            replacement.oldPrice
+                        ) || 0;
+
+                }
+            );
+
+        }
+
+
+        return total;
+
+    }
+
+
+    /* =========================
+       HULPFUNCTIES
+       ========================= */
+
+    function formatDate(
+        date
+    ) {
+
+        if (!date) {
+
+            return "Geen datum";
+
+        }
+
+
+        const d =
+            new Date(date);
+
+
+        if (
+            isNaN(d)
+        ) {
+
+            return date;
+
+        }
+
+
+        return d.toLocaleDateString(
+            "nl-BE"
+        );
+
+    }
+
+
+    function escapeHtml(
+        value
+    ) {
+
+        return String(value)
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+            .replace(
+                /</g,
+                "&lt;"
+            )
+            .replace(
+                />/g,
+                "&gt;"
+            )
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+            .replace(
+                /'/g,
+                "&#039;"
+            );
+
+    }
+
+
+    /* =========================
+       START
+       ========================= */
+
+    loadData();
+
+</script>
+
+</body>
+</html>
