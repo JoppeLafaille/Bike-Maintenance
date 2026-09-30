@@ -482,6 +482,34 @@
                 flex-direction: column;
             }
         }
+    
+        .password-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .password-wrapper input {
+            width: 100%;
+            padding-right: 45px;
+            box-sizing: border-box;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .toggle-password:hover {
+            opacity: 0.7;
+        }
+
     </style>
 </head>
 
@@ -519,12 +547,22 @@
             Wachtwoord
         </label>
 
-        <input
-            id="authPassword"
-            type="password"
-            placeholder="Minimaal 6 tekens"
-            autocomplete="current-password"
-        >
+        <div class="password-wrapper">
+            <input
+                id="authPassword"
+                type="password"
+                placeholder="Minimaal 6 tekens"
+                autocomplete="current-password"
+            >
+
+            <button
+                type="button"
+                class="toggle-password"
+                onclick="togglePassword()"
+                aria-label="Wachtwoord tonen"
+                title="Wachtwoord tonen"
+            >👁</button>
+        </div>
 
         <div class="auth-buttons">
 
@@ -4511,7 +4549,32 @@
 
     }
 
+
+        function togglePassword() {
+            const passwordInput = document.getElementById("authPassword");
+            const toggleButton = document.querySelector(".toggle-password");
+
+            if (!passwordInput || !toggleButton) {
+                return;
+            }
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleButton.textContent = "🙈";
+                toggleButton.setAttribute("aria-label", "Wachtwoord verbergen");
+                toggleButton.setAttribute("title", "Wachtwoord verbergen");
+            } else {
+                passwordInput.type = "password";
+                toggleButton.textContent = "👁";
+                toggleButton.setAttribute("aria-label", "Wachtwoord tonen");
+                toggleButton.setAttribute("title", "Wachtwoord tonen");
+            }
+        }
+
 </script>
+
+
+
 
 </body>
 </html>
